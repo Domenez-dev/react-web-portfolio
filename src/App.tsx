@@ -204,7 +204,7 @@ function App() {
           </p>
           <div className="flex justify-center space-x-6">
             <a
-              href="mailto:your.email@example.com"
+              href="mailto:bouzara.zakaria.25@gmail.com"
               className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
             >
               Contact Me
