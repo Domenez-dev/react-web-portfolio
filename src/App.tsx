@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Github, Linkedin, Mail, Menu, X, ExternalLink, Code, Monitor, Database, Cloud, Users, Palette, Video, Award } from 'lucide-react';
+import { Github, Linkedin, Mail, Menu, X, ExternalLink, Code, Monitor, Database, Cloud, Users, Palette, Video, Award, Instagram } from 'lucide-react';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -73,7 +73,10 @@ function App() {
               <a href="https://linkedin.com/in/bouzara-zakaria" className="text-gray-600 hover:text-blue-600 transition-colors">
                 <Linkedin size={24} />
               </a>
-              <a href="mailto:bouzara.zakaria.25@gmail.com" className="text-gray-600 hover:text-blue-600 transition-colors">
+              <a href="https://instagram.com/bouzara.zakaria" className="text-gray-600 hover:text-blue-600 transition-colors">
+                <Instagram size={24} />
+              </a>
+              <a href="mailto:your.email@example.com" className="text-gray-600 hover:text-blue-600 transition-colors">
                 <Mail size={24} />
               </a>
             </div>
@@ -204,7 +207,7 @@ function App() {
           </p>
           <div className="flex justify-center space-x-6">
             <a
-              href="mailto:bouzara.zakaria.25@gmail.com"
+              href="mailto:your.email@example.com"
               className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
             >
               Contact Me
