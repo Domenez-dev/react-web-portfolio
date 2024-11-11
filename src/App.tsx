@@ -165,7 +165,7 @@ function App() {
             <SkillCard
               icon={<Monitor />}
               title="Frameworks"
-              skills={["Django", "React", "Flask", "Next.js"]}
+              skills={["Django", "Flask", "React", "svelte", "Next.js"]}
             />
             <SkillCard
               icon={<Database />}
