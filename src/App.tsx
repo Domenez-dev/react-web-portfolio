@@ -253,7 +253,9 @@ function App() {
             </h1>
             <div className="text-xl sm:text-2xl lg:text-3xl text-slate-300 mb-8">
               <span className="inline-block animate-bounce">👨‍💻</span>
-              <span className="ml-4">DevOps Engineer & Web Developer</span>
+              <span className="ml-4">
+                Junior DevOps Engineer & Web Developer
+              </span>
             </div>
             <p className="text-lg sm:text-xl text-slate-400 max-w-3xl mx-auto mb-12 leading-relaxed">
               Passionate about cloud infrastructure, automation, and building
@@ -314,10 +316,10 @@ function App() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <p className="text-lg text-slate-300 leading-relaxed">
-                I'm a passionate DevOps Engineer and Web Developer with a strong
-                foundation in cloud infrastructure, automation, and web
-                security. I excel in building scalable solutions using modern
-                technologies and best practices.
+                I'm a passionate DevOps Engineer and Web Developer with a
+                background in cloud infrastructure, automation, and web
+                security. I excel in building scalable and optimized solutions
+                using modern technologies and best practices.
               </p>
               <p className="text-lg text-slate-300 leading-relaxed">
                 Currently pursuing a Master's degree in Network and Distributed
