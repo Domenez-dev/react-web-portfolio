@@ -55,16 +55,17 @@ function App() {
       "FastAPI",
       "Bootstrap",
       "TailwindCSS",
+      "GRpc",
     ],
     tools: [
       "Git/GitHub",
       "Docker",
       "Kubernetes",
-      "Jenkins",
       "Terraform",
       "NGINX",
       "Apache",
       "SSH",
+      "Proxmox",
     ],
     cloud: ["AWS", "Azure", "GCP", "DigitalOcean", "heroku", "Firebase"],
     domains: ["Web Security", "Cloud Services", "Automation", "Databases"],
@@ -72,18 +73,18 @@ function App() {
 
   const experience = [
     {
+      title: "Microservices Monitoring Intern",
+      company: "Amana Assurances - Elbiar Algiers, Algeria",
+      period: "Jun 2025 – Sep 2025", // Update this with your specific start/end dates
+      description:
+        "Implemented a comprehensive monitoring and logging solution using an open-source stack (Grafana, Prometheus, and Graylog). \nConfigured Alertmanager to automate real-time incident notifications and system health tracking. \nOptimized infrastructure visibility by designing custom dashboards to monitor critical system metrics.",
+    },
+    {
       title: "Intern Web Developer & Web Security Engineer",
-      company: "CERIST",
+      company: "CERIST - Ben aknoun Algiers, Algeria",
       period: "Dec 2023 – Jun 2024",
       description:
         "Developed Wikayanet.dz, a platform for publishing cybersecurity news and articles, using Django and Express.js. \nResearched and implemented web security best practices to secure the application. \nCollaborated with senior engineers to ensure robust back-end systems and data protection practices.",
-    },
-    {
-      title: "Development Team & Communications",
-      company: "Celec (Club Electronique), USTHB",
-      period: "Oct 2022 – Present",
-      description:
-        "Part of the Development Team and Communications (ex Video Editor). Developed forms with Svelte.js and joined internal hackathons.",
     },
     {
       title: "Developed Team Member",
@@ -110,11 +111,11 @@ function App() {
       status: "Completed",
     },
     {
-      title: "VPN Manager",
+      title: "Hyperconverged Cloud Infrastructure (HCI)",
       description:
-        "A local hosted platform that manages VPN such as OpenVPN and WireGuard on infrastructure using IaaC.",
-      tech: ["Terraform", "Go", "Docker", "GCP", "AWS"],
-      status: "In Development",
+        "Architected and deployed a highly available hyperconverged infrastructure, integrating compute, storage, and networking into a single software-defined pool.",
+      tech: ["Proxmox", "Ceph", "KVM", "OpenStack", "Terraform"],
+      status: "In Dev",
     },
     {
       title: "Registrations form template",
@@ -127,7 +128,7 @@ function App() {
       description:
         "A newsletter mailing app that sends cybersecurity relevant mails to subscribers 3 times a week.",
       tech: ["Go", "Fiber", "Docker", "mailGun"],
-      status: "In Development",
+      status: "In Dev",
     },
   ];
 
@@ -142,12 +143,6 @@ function App() {
       degree: "Bachelor's Degree in Computer Science",
       school: "University of USTHB",
       period: "Sep 2021 – Jun 2024",
-      status: "completed",
-    },
-    {
-      degree: "Baccalaureate (Excellent Degree)",
-      school: "Lycee Boudernane El Djilali, Tissemsilet",
-      period: "Jun 2021",
       status: "completed",
     },
   ];
@@ -480,10 +475,11 @@ function App() {
               </div>
               <div className="space-y-2">
                 <div className="text-teal-300 text-sm">
-                  ICT-Towers: Basic Security (Sep 2022)
+                  <b>Winner (1st Place):</b> Yalidine "Hack the future"
+                  Hackathon (Nov 2025)
                 </div>
                 <div className="text-teal-300 text-sm">
-                  DisHack: Project Management Hackathon (Nov 2023)
+                  <b>ICT-Towers:</b> Basic Security (Sep 2022)
                 </div>
               </div>
             </div>
