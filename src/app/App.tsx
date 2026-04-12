@@ -873,7 +873,7 @@ export default function App() {
               viewport={{ once: false, amount: 0.3 }}
               className={`text-sm sm:text-base mb-8 sm:mb-12 ${mutedClass}`}
             >
-              Open to internships, collaborations and freelance
+              Open to collaborations and freelance
             </motion.p>
 
             <motion.div
@@ -884,14 +884,27 @@ export default function App() {
               className={`border ${borderClass} rounded-lg mb-8 sm:mb-12 overflow-hidden`}
             >
               {[
-                { label: "EMAIL", value: "Bouzara.Zakaria.25@gmail.com" },
-                { label: "LINKEDIN", value: "linkedin.com/in/zakaria-bouzara" },
+                {
+                  label: "EMAIL",
+                  value: "Bouzara.Zakaria.25@gmail.com",
+                  href: "mailto:Bouzara.Zakaria.25@gmail.com",
+                },
+                {
+                  label: "LINKEDIN",
+                  value: "linkedin.com/in/zakaria-bouzara",
+                  href: "https://linkedin.com/in/zakaria-bouzara",
+                },
                 {
                   label: "PORTFOLIO",
                   value: "https://zakaria-resume.netlify.app/",
+                  href: "https://zakaria-resume.netlify.app/",
                 },
-                { label: "PHONE", value: "+213 557520413" },
-                { label: "LOCATION", value: "Algiers, Algeria" },
+                { label: "PHONE", value: "+213 557520413", href: undefined },
+                {
+                  label: "LOCATION",
+                  value: "Algiers, Algeria",
+                  href: undefined,
+                },
               ].map((item, index) => (
                 <div
                   key={index}
@@ -903,7 +916,20 @@ export default function App() {
                     {item.label}
                   </div>
                   <div className="text-right text-sm sm:text-base font-light">
-                    {item.value}
+                    {item.href ? (
+                      <a
+                        href={item.href}
+                        target={
+                          item.href.startsWith("mailto") ? "_self" : "_blank"
+                        }
+                        rel="noopener noreferrer"
+                        className={`underline underline-offset-4 decoration-1 opacity-70 hover:opacity-100 transition-opacity duration-150 ${textClass}`}
+                      >
+                        {item.value}
+                      </a>
+                    ) : (
+                      item.value
+                    )}
                   </div>
                 </div>
               ))}
