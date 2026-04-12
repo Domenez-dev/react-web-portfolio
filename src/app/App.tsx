@@ -251,6 +251,7 @@ export default function App() {
   const borderClass = isDark ? "border-white" : "border-black";
   const mutedClass = isDark ? "text-white/50" : "text-black/50";
   const bgSecondaryClass = isDark ? "bg-white" : "bg-black";
+  const itemBgClass = isDark ? "bg-white/[0.05]" : "bg-black/[0.05]";
 
   // Accent color classes for light mode
   const accentBorderClass = isDark ? "border-white" : "border-[#2563eb]";
@@ -289,7 +290,7 @@ export default function App() {
         e.currentTarget.style.borderColor = color;
         e.currentTarget.style.color = color;
         e.currentTarget.style.boxShadow = `0 0 8px ${color}40`;
-        e.currentTarget.style.backgroundColor = `${color}15`;
+        e.currentTarget.style.backgroundColor = `${color}30`;
         e.currentTarget.style.transform = "translateY(-1px) scale(1.05)";
       }
     },
@@ -302,7 +303,7 @@ export default function App() {
     },
   });
 
-  const skillTagBaseClass = `skill-tag border ${borderClass} px-3 py-1.5 rounded text-sm transition-all duration-150`;
+  const skillTagBaseClass = `skill-tag border ${borderClass} backdrop-blur-sm px-3 py-1.5 rounded text-sm transition-all duration-150`;
 
   // Slide transition variants
   const slideVariants = {
@@ -445,26 +446,31 @@ export default function App() {
         <section className="min-w-full w-screen h-full snap-start flex items-center justify-center px-6 sm:px-8 md:px-16 lg:px-24">
           <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
             <div className="flex items-center justify-center">
-              <div
-                className={`w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 border ${borderClass} rounded-full flex items-center justify-center overflow-hidden`}
-              >
-                <img
-                  src="/pfp.jpg"
-                  alt="Profile"
-                  className="w-full h-full object-cover rounded-full"
-                  onError={(e) => {
-                    const target = e.currentTarget;
-                    target.style.display = "none";
-                    const parent = target.parentElement;
-                    if (parent && !parent.querySelector(".pfp-fallback")) {
-                      const fallback = document.createElement("span");
-                      fallback.className =
-                        "pfp-fallback text-5xl sm:text-6xl font-bold opacity-30";
-                      fallback.textContent = "BZ";
-                      parent.appendChild(fallback);
-                    }
-                  }}
-                />
+              <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 rounded-full flex items-center justify-center overflow-hidden group">
+                {/* Counter-clockwise spinning border */}
+                <div className="absolute inset-[-50%] animate-[spin_4s_linear_infinite_reverse] bg-[conic-gradient(from_90deg_at_50%_50%,#2563eb_0%,transparent_30%,transparent_100%)] opacity-80" />
+
+                <div
+                  className={`absolute inset-[3px] rounded-full overflow-hidden ${bgClass} z-10 flex items-center justify-center`}
+                >
+                  <img
+                    src="https://res.cloudinary.com/dllozpfmy/image/upload/v1776035109/pfp_niw2bg.jpg"
+                    alt="Profile"
+                    className="w-full h-full object-cover rounded-full"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      target.style.display = "none";
+                      const parent = target.parentElement;
+                      if (parent && !parent.querySelector(".pfp-fallback")) {
+                        const fallback = document.createElement("span");
+                        fallback.className =
+                          "pfp-fallback text-5xl sm:text-6xl font-bold opacity-30";
+                        fallback.textContent = "BZ";
+                        parent.appendChild(fallback);
+                      }
+                    }}
+                  />
+                </div>
               </div>
             </div>
 
@@ -495,12 +501,20 @@ export default function App() {
                   href="https://github.com/zakaria-bouzara"
                   target="_blank"
                   rel="noopener noreferrer"
+                  style={{
+                    backgroundColor: isDark
+                      ? "rgba(255,255,255,0.05)"
+                      : "rgba(0,0,0,0.05)",
+                  }}
                   whileHover={{
+                    backgroundColor: isDark
+                      ? "rgba(255,255,255,0.15)"
+                      : "rgba(0,0,0,0.15)",
                     boxShadow: isDark
                       ? "0 0 8px rgba(255, 255, 255, 0.6)"
                       : "0 0 8px rgba(0, 0, 0, 0.4)",
                   }}
-                  className={`flex items-center gap-2 border ${borderClass} px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150`}
+                  className={`flex items-center gap-2 border ${borderClass} backdrop-blur-sm px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150`}
                 >
                   <Github className="w-4 h-4" />
                   GitHub
@@ -509,8 +523,12 @@ export default function App() {
                   href="https://linkedin.com/in/zakaria-bouzara"
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ boxShadow: "0 0 8px rgba(10, 102, 194, 0.5)" }}
-                  className={`flex items-center gap-2 border px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150 ${isDark ? "border-white hover:border-[#0A66C2] hover:text-[#0A66C2]" : "border-[#0A66C2] text-[#0A66C2]"}`}
+                  style={{ backgroundColor: "rgba(10, 102, 194, 0.1)" }}
+                  whileHover={{
+                    backgroundColor: "rgba(10, 102, 194, 0.2)",
+                    boxShadow: "0 0 8px rgba(10, 102, 194, 0.5)",
+                  }}
+                  className={`flex items-center gap-2 border backdrop-blur-sm px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150 ${isDark ? "border-white hover:border-[#0A66C2] hover:text-[#0A66C2]" : "border-[#0A66C2] text-[#0A66C2]"}`}
                 >
                   <Linkedin className="w-4 h-4" />
                   LinkedIn
@@ -519,8 +537,20 @@ export default function App() {
                   href="/resume.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ boxShadow: "0 0 8px rgba(34, 197, 94, 0.5)" }}
-                  className={`flex items-center gap-2 border px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150 ${isDark ? "border-white hover:border-[#22c55e] hover:text-[#22c55e]" : "border-[#16a34a] text-[#16a34a]"}`}
+                  style={{
+                    backgroundColor: isDark
+                      ? "rgba(34, 197, 94, 0.1)"
+                      : "rgba(22, 163, 74, 0.1)",
+                  }}
+                  whileHover={{
+                    backgroundColor: isDark
+                      ? "rgba(34, 197, 94, 0.2)"
+                      : "rgba(22, 163, 74, 0.2)",
+                    boxShadow: isDark
+                      ? "0 0 8px rgba(34, 197, 94, 0.5)"
+                      : "0 0 8px rgba(22, 163, 74, 0.5)",
+                  }}
+                  className={`flex items-center gap-2 border backdrop-blur-sm px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150 ${isDark ? "border-white hover:border-[#22c55e] hover:text-[#22c55e]" : "border-[#16a34a] text-[#16a34a]"}`}
                 >
                   <FileText className="w-4 h-4" />
                   Resume
@@ -674,8 +704,8 @@ export default function App() {
                     {project.tech.map((t) => (
                       <span
                         key={t}
-                        className={`text-xs border ${borderClass} px-2 py-0.5 rounded transition-all duration-150 ${
-                          isDark ? "opacity-60" : "opacity-50"
+                        className={`text-xs border ${borderClass} backdrop-blur-sm px-2 py-0.5 rounded transition-all duration-150 ${
+                          isDark ? "opacity-90" : "opacity-80"
                         }`}
                         style={getSkillTagStyle(t)}
                         {...skillTagHoverHandlers(t)}
