@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Github, Linkedin, FileText } from "lucide-react";
 import DotGrid from "./components/DotGrid";
 import CustomCursor from "./components/CustomCursor";
 
@@ -10,6 +10,7 @@ export default function App() {
   const [isDark, setIsDark] = useState(true);
   const [activeSection, setActiveSection] = useState(0);
   const [prevSection, setPrevSection] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -39,7 +40,12 @@ export default function App() {
     const handleScroll = () => {
       const scrollLeft = container.scrollLeft;
       const slideWidth = container.clientWidth;
+      const maxScroll = container.scrollWidth - container.clientWidth;
       const newSection = Math.round(scrollLeft / slideWidth);
+
+      // Update parallax scroll progress (0 to 1)
+      setScrollProgress(maxScroll > 0 ? scrollLeft / maxScroll : 0);
+
       if (newSection !== activeSection) {
         setPrevSection(activeSection);
         setActiveSection(newSection);
@@ -64,46 +70,57 @@ export default function App() {
       description:
         "E-commerce Platform dedicated for algerian female community",
       status: "COMPLETED",
+      url: "#",
+      tech: ["React", "PostgreSQL", "Supabase", "Netlify"],
     },
     {
-      title: "HCI INFRASTRUCTURE",
+      title: "Hyperconverged Cloud Infrastructure (HCI)",
       description:
-        "Deployement of a private Hyperconverged infrastructure deployment For Sonatrach",
+        "Architected and deployed a highly available hyperconverged infrastructure, integrating compute, storage, and networking into a single software-defined pool",
       status: "IN DEV",
+      url: "#",
+      tech: ["Proxmox", "Ceph", "KVM", "Open vSwitch", "Ansible"],
     },
     {
       title: "WIKAYANET",
       description:
-        "A cyberSecurity news Platefore that has been built for CERIST",
+        "A Secure web platform using Django and ExpressJS to deliver real-time security updates and news.",
       status: "COMPLETED",
+      url: "#",
+      tech: ["Django", "HTML/CSS", "Express", "JavaScript"],
     },
     {
       title: "INSECURE-MAIL",
-      description: "Security research and penetration testing",
+      description:
+        "A newsletter mailing app that sends cybersecurity relevant mails to subscribers 3 times a week.",
       status: "IN DEV",
+      url: "#",
+      tech: ["Go", "Fiber", "Docker", "Mailgun", "n8n"],
     },
   ];
 
   const internships = [
     {
       company: "SONATRACH",
-      role: "Networks & Systems Engineer",
-      period: "FEB 2023 - PRESENT",
-      context: "Infrastructure automation and cloud operations",
+      role: "Infrastructure and Networks Engineer",
+      period: "JAN 2026 - PRESENT",
+      context: "and deployment of an HCI based on open source technologies.",
       status: "ONGOING",
     },
     {
       company: "AMANA",
-      role: "DevOps Engineer",
-      period: "JUN 2022 - AUG 2022",
-      context: "CI/CD pipeline development and containerization",
+      role: "Microservices Monitoring Intern",
+      period: "JUN 2025 - AUG 2025",
+      context:
+        "Implemented a Monitoring solution for microservices, and databases",
       status: "COMPLETED",
     },
     {
       company: "CERIST",
-      role: "Research Engineer",
-      period: "JAN 2021 - MAY 2021",
-      context: "Network security and systems research",
+      role: "Intern Web Developer & Web Security Engineer",
+      period: "JAN 2024 - MAY 2024",
+      context:
+        "Developed a Web app while Implementing web security best practices",
       status: "COMPLETED",
     },
   ];
@@ -112,14 +129,14 @@ export default function App() {
     {
       name: "CELEC USTHB",
       role: "Member",
-      period: "OCT 2022 - PRESENT",
+      period: "OCT 2022 - OCT 2024",
       context: "Electronics and embedded systems club",
     },
     {
       name: "GDG ESI ALGER",
       role: "Core Team Member",
       period: "OCT 2024 - PRESENT",
-      context: "Google Developer Group community activities",
+      context: "Developper at Google Developer Group community activities",
     },
     {
       name: "SHELLMATES CLUB ESI ALGER",
@@ -150,30 +167,43 @@ export default function App() {
   // Per-technology hover colors
   const techHoverColors: Record<string, string> = {
     // Languages
-    Python: '#3776AB',
-    Go: '#00ADD8',
-    JavaScript: '#F7DF1E',
-    PHP: '#777BB4',
-    'C#': '#239120',
-    Java: '#ED8B00',
-    Lua: '#2C2D72',
-    YAML: '#CB171E',
+    Python: "#3776AB",
+    Go: "#00ADD8",
+    JavaScript: "#F7DF1E",
+    PHP: "#777BB4",
+    "C#": "#239120",
+    Java: "#ED8B00",
+    Lua: "#2C2D72",
+    YAML: "#CB171E",
     // Frameworks
-    Django: '#092E20',
-    'Next.js': '#808080',
-    React: '#61DAFB',
-    Express: '#68A063',
-    Flask: '#888888',
-    TailwindCSS: '#06B6D4',
+    Django: "#092E20",
+    "Next.js": "#808080",
+    React: "#61DAFB",
+    Express: "#68A063",
+    Flask: "#888888",
+    TailwindCSS: "#06B6D4",
     // Tools
-    Docker: '#2496ED',
-    Kubernetes: '#326CE5',
-    Terraform: '#7B42BC',
-    Jenkins: '#D24939',
-    Nginx: '#009639',
-    Git: '#F05032',
-    SSH: '#4EAA25',
-    'OWASP ZAP': '#F68D2E',
+    Docker: "#2496ED",
+    Kubernetes: "#326CE5",
+    Terraform: "#7B42BC",
+    Jenkins: "#D24939",
+    Nginx: "#009639",
+    Git: "#F05032",
+    SSH: "#4EAA25",
+    "OWASP ZAP": "#F68D2E",
+    // Project-specific techs
+    PostgreSQL: "#336791",
+    Supabase: "#3ECF8E",
+    Netlify: "#00C7B7",
+    Proxmox: "#E57000",
+    Ceph: "#EF5C55",
+    KVM: "#3776AB",
+    "Open vSwitch": "#00599C",
+    Ansible: "#EE0000",
+    "HTML/CSS": "#E34F26",
+    Fiber: "#00ADD8",
+    Mailgun: "#F06B66",
+    n8n: "#EA4B71",
   };
 
   const languages = [
@@ -219,7 +249,6 @@ export default function App() {
   const borderClass = isDark ? "border-white" : "border-black";
   const mutedClass = isDark ? "text-white/50" : "text-black/50";
   const bgSecondaryClass = isDark ? "bg-white" : "bg-black";
-  const textSecondaryClass = isDark ? "text-black" : "text-white";
 
   // Accent color classes for light mode
   const accentBorderClass = isDark ? "border-white" : "border-[#2563eb]";
@@ -229,15 +258,15 @@ export default function App() {
     : "0 0 8px rgba(37, 99, 235, 0.5)";
 
   const getStatusColor = (status: string) => {
-    if (status === 'COMPLETED') {
+    if (status === "COMPLETED") {
       return isDark
-        ? 'border-[#4ade80] text-[#4ade80]'
-        : 'border-[#16a34a] bg-[#16a34a]/10 text-[#15803d] font-medium';
+        ? "border-[#4ade80] text-[#4ade80]"
+        : "border-[#16a34a] bg-[#16a34a]/10 text-[#15803d] font-medium";
     }
-    if (status === 'IN DEV' || status === 'ONGOING') {
+    if (status === "IN DEV" || status === "ONGOING") {
       return isDark
-        ? 'border-[#fbbf24] text-[#fbbf24]'
-        : 'border-[#d97706] bg-[#d97706]/10 text-[#b45309] font-medium';
+        ? "border-[#fbbf24] text-[#fbbf24]"
+        : "border-[#d97706] bg-[#d97706]/10 text-[#b45309] font-medium";
     }
     return borderClass;
   };
@@ -246,9 +275,32 @@ export default function App() {
     const color = techHoverColors[name];
     if (!color) return {};
     return {
-      '--hover-color': color,
+      "--hover-color": color,
     } as React.CSSProperties;
   };
+
+  // Reusable skill tag hover handlers
+  const skillTagHoverHandlers = (name: string) => ({
+    onMouseEnter: (e: React.MouseEvent<HTMLSpanElement>) => {
+      const color = techHoverColors[name];
+      if (color) {
+        e.currentTarget.style.borderColor = color;
+        e.currentTarget.style.color = color;
+        e.currentTarget.style.boxShadow = `0 0 8px ${color}40`;
+        e.currentTarget.style.backgroundColor = `${color}15`;
+        e.currentTarget.style.transform = "translateY(-1px) scale(1.05)";
+      }
+    },
+    onMouseLeave: (e: React.MouseEvent<HTMLSpanElement>) => {
+      e.currentTarget.style.borderColor = "";
+      e.currentTarget.style.color = "";
+      e.currentTarget.style.boxShadow = "";
+      e.currentTarget.style.backgroundColor = "";
+      e.currentTarget.style.transform = "";
+    },
+  });
+
+  const skillTagBaseClass = `skill-tag border ${borderClass} px-3 py-1.5 rounded text-sm transition-all duration-150`;
 
   // Slide transition variants
   const slideVariants = {
@@ -261,8 +313,8 @@ export default function App() {
     <div
       className={`relative w-screen h-screen ${bgClass} ${textClass} font-mono overflow-hidden`}
     >
-      {/* Dot Grid Background */}
-      <DotGrid isDark={isDark} />
+      {/* Dot Grid Background with parallax */}
+      <DotGrid isDark={isDark} scrollOffset={scrollProgress} />
 
       {/* Custom Cursor */}
       <CustomCursor isDark={isDark} />
@@ -382,21 +434,20 @@ export default function App() {
           <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
             <div className="flex items-center justify-center">
               <div
-                className={`w-48 h-48 sm:w-64 sm:h-64 border ${borderClass} rounded-full flex items-center justify-center overflow-hidden`}
+                className={`w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 border ${borderClass} rounded-full flex items-center justify-center overflow-hidden`}
               >
                 <img
                   src="/pfp.jpg"
                   alt="Profile"
                   className="w-full h-full object-cover rounded-full"
                   onError={(e) => {
-                    // Fallback: show initials if image not found
                     const target = e.currentTarget;
                     target.style.display = "none";
                     const parent = target.parentElement;
                     if (parent && !parent.querySelector(".pfp-fallback")) {
                       const fallback = document.createElement("span");
                       fallback.className =
-                        "pfp-fallback text-4xl sm:text-5xl font-bold opacity-30";
+                        "pfp-fallback text-5xl sm:text-6xl font-bold opacity-30";
                       fallback.textContent = "BZ";
                       parent.appendChild(fallback);
                     }
@@ -428,24 +479,40 @@ export default function App() {
               </div>
 
               <div className="flex flex-wrap gap-3 sm:gap-4 mb-8">
-                <motion.button
-                  whileHover={{ boxShadow: accentHoverShadow }}
-                  className={`border ${isDark ? borderClass : accentBorderClass} px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150 ${!isDark ? accentTextClass : ""}`}
+                <motion.a
+                  href="https://github.com/zakaria-bouzara"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{
+                    boxShadow: isDark
+                      ? "0 0 8px rgba(255, 255, 255, 0.6)"
+                      : "0 0 8px rgba(0, 0, 0, 0.4)",
+                  }}
+                  className={`flex items-center gap-2 border ${borderClass} px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150`}
                 >
+                  <Github className="w-4 h-4" />
                   GitHub
-                </motion.button>
-                <motion.button
-                  whileHover={{ boxShadow: accentHoverShadow }}
-                  className={`border ${isDark ? borderClass : accentBorderClass} px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150 ${!isDark ? accentTextClass : ""}`}
+                </motion.a>
+                <motion.a
+                  href="https://linkedin.com/in/zakaria-bouzara"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ boxShadow: "0 0 8px rgba(10, 102, 194, 0.5)" }}
+                  className={`flex items-center gap-2 border px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150 ${isDark ? "border-white hover:border-[#0A66C2] hover:text-[#0A66C2]" : "border-[#0A66C2] text-[#0A66C2]"}`}
                 >
+                  <Linkedin className="w-4 h-4" />
                   LinkedIn
-                </motion.button>
-                <motion.button
-                  whileHover={{ boxShadow: accentHoverShadow }}
-                  className={`border ${isDark ? borderClass : accentBorderClass} px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150 ${!isDark ? accentTextClass : ""}`}
+                </motion.a>
+                <motion.a
+                  href="/resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ boxShadow: "0 0 8px rgba(34, 197, 94, 0.5)" }}
+                  className={`flex items-center gap-2 border px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150 ${isDark ? "border-white hover:border-[#22c55e] hover:text-[#22c55e]" : "border-[#16a34a] text-[#16a34a]"}`}
                 >
+                  <FileText className="w-4 h-4" />
                   Resume
-                </motion.button>
+                </motion.a>
               </div>
             </div>
           </div>
@@ -494,23 +561,9 @@ export default function App() {
                     {languages.map((lang) => (
                       <span
                         key={lang}
-                        className={`skill-tag border ${borderClass} px-3 py-1.5 rounded text-sm transition-all duration-150`}
+                        className={skillTagBaseClass}
                         style={getSkillTagStyle(lang)}
-                        onMouseEnter={(e) => {
-                          const color = techHoverColors[lang];
-                          if (color) {
-                            e.currentTarget.style.borderColor = color;
-                            e.currentTarget.style.color = color;
-                            e.currentTarget.style.boxShadow = `0 0 8px ${color}40`;
-                            e.currentTarget.style.transform = 'translateY(-1px) scale(1.05)';
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = '';
-                          e.currentTarget.style.color = '';
-                          e.currentTarget.style.boxShadow = '';
-                          e.currentTarget.style.transform = '';
-                        }}
+                        {...skillTagHoverHandlers(lang)}
                       >
                         {lang}
                       </span>
@@ -526,23 +579,9 @@ export default function App() {
                     {frameworks.map((framework) => (
                       <span
                         key={framework}
-                        className={`skill-tag border ${borderClass} px-3 py-1.5 rounded text-sm transition-all duration-150`}
+                        className={skillTagBaseClass}
                         style={getSkillTagStyle(framework)}
-                        onMouseEnter={(e) => {
-                          const color = techHoverColors[framework];
-                          if (color) {
-                            e.currentTarget.style.borderColor = color;
-                            e.currentTarget.style.color = color;
-                            e.currentTarget.style.boxShadow = `0 0 8px ${color}40`;
-                            e.currentTarget.style.transform = 'translateY(-1px) scale(1.05)';
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = '';
-                          e.currentTarget.style.color = '';
-                          e.currentTarget.style.boxShadow = '';
-                          e.currentTarget.style.transform = '';
-                        }}
+                        {...skillTagHoverHandlers(framework)}
                       >
                         {framework}
                       </span>
@@ -558,23 +597,9 @@ export default function App() {
                     {tools.map((tool) => (
                       <span
                         key={tool}
-                        className={`skill-tag border ${borderClass} px-3 py-1.5 rounded text-sm transition-all duration-150`}
+                        className={skillTagBaseClass}
                         style={getSkillTagStyle(tool)}
-                        onMouseEnter={(e) => {
-                          const color = techHoverColors[tool];
-                          if (color) {
-                            e.currentTarget.style.borderColor = color;
-                            e.currentTarget.style.color = color;
-                            e.currentTarget.style.boxShadow = `0 0 8px ${color}40`;
-                            e.currentTarget.style.transform = 'translateY(-1px) scale(1.05)';
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = '';
-                          e.currentTarget.style.color = '';
-                          e.currentTarget.style.boxShadow = '';
-                          e.currentTarget.style.transform = '';
-                        }}
+                        {...skillTagHoverHandlers(tool)}
                       >
                         {tool}
                       </span>
@@ -598,8 +623,11 @@ export default function App() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {projects.map((project, index) => (
-                <motion.div
+                <motion.a
                   key={index}
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.4 }}
@@ -609,9 +637,9 @@ export default function App() {
                       ? "0 0 12px rgba(255, 255, 255, 0.4)"
                       : "0 0 12px rgba(37, 99, 235, 0.35)",
                   }}
-                  className={`border ${borderClass} p-5 sm:p-6 rounded-lg transition-all duration-150 group cursor-pointer`}
+                  className={`flex flex-col border ${borderClass} p-5 sm:p-6 rounded-lg transition-all duration-150 group cursor-pointer no-underline ${textClass}`}
                 >
-                  <div className="flex justify-between items-start mb-4">
+                  <div className="flex justify-between items-start mb-3">
                     <h3
                       className="text-lg sm:text-xl font-bold"
                       style={{
@@ -626,9 +654,24 @@ export default function App() {
                       {project.status}
                     </span>
                   </div>
-                  <p className="text-sm font-light mb-6">
+                  <p className="text-sm font-light mb-4 flex-grow">
                     {project.description}
                   </p>
+                  {/* Tech tags — pinned to bottom */}
+                  <div className="flex flex-wrap gap-1.5 mb-3 mt-auto">
+                    {project.tech.map((t) => (
+                      <span
+                        key={t}
+                        className={`text-xs border ${borderClass} px-2 py-0.5 rounded transition-all duration-150 ${
+                          isDark ? "opacity-60" : "opacity-50"
+                        }`}
+                        style={getSkillTagStyle(t)}
+                        {...skillTagHoverHandlers(t)}
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
                   <div className="flex justify-end opacity-50 group-hover:opacity-100 transition-opacity duration-150">
                     <svg
                       width="20"
@@ -641,7 +684,7 @@ export default function App() {
                       <path d="M5 15L15 5M15 5H5M15 5V15" />
                     </svg>
                   </div>
-                </motion.div>
+                </motion.a>
               ))}
 
               <motion.div
@@ -769,7 +812,7 @@ export default function App() {
 
         {/* Slide 6 - Contact */}
         <section className="min-w-full w-screen h-full snap-start flex items-center justify-center px-6 sm:px-8 md:px-16 lg:px-24">
-          <div className="w-full max-w-2xl text-center">
+          <div className="w-full max-w-3xl text-center">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -799,22 +842,25 @@ export default function App() {
               className={`border ${borderClass} rounded-lg mb-8 sm:mb-12 overflow-hidden`}
             >
               {[
-                { label: "EMAIL", value: "zakaria.bouzara@example.com" },
+                { label: "EMAIL", value: "Bouzara.Zakaria.25@gmail.com" },
                 { label: "LINKEDIN", value: "linkedin.com/in/zakaria-bouzara" },
-                { label: "PORTFOLIO", value: "bouzara.dev" },
-                { label: "PHONE", value: "+213 555 123 456" },
+                {
+                  label: "PORTFOLIO",
+                  value: "https://zakaria-resume.netlify.app/",
+                },
+                { label: "PHONE", value: "+213 557520413" },
                 { label: "LOCATION", value: "Algiers, Algeria" },
               ].map((item, index) => (
                 <div
                   key={index}
-                  className={`grid grid-cols-2 gap-4 px-4 sm:px-6 py-3 sm:py-4 ${index !== 4 ? `border-b ${borderClass}` : ""}`}
+                  className={`grid grid-cols-2 gap-4 px-5 sm:px-8 py-4 sm:py-5 ${index !== 4 ? `border-b ${borderClass}` : ""}`}
                 >
                   <div
-                    className={`text-left text-xs tracking-widest ${mutedClass}`}
+                    className={`text-left text-xs sm:text-sm tracking-widest ${mutedClass}`}
                   >
                     {item.label}
                   </div>
-                  <div className="text-right text-sm font-light">
+                  <div className="text-right text-sm sm:text-base font-light">
                     {item.value}
                   </div>
                 </div>
