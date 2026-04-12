@@ -13,10 +13,10 @@ interface Dot {
   scale: number;
 }
 
-const DOT_SPACING = 32;
-const DOT_RADIUS = 1.2;
-const INFLUENCE_RADIUS = 200;
-const MAX_DISPLACEMENT = 10;
+const DOT_SPACING = 21;
+const DOT_RADIUS = 0.8;
+const INFLUENCE_RADIUS = 134;
+const MAX_DISPLACEMENT = 7;
 const EASE_SPEED = 0.08;
 const RETURN_SPEED = 0.06;
 const PARALLAX_FACTOR = 0.4;

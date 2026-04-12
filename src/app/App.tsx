@@ -155,9 +155,11 @@ export default function App() {
       name: "Web Security",
       tools: "OWASP ZAP, Burp Suite, Penetration Testing",
     },
-    { name: "Cloud Services", tools: "Azure, GCP, AWS, Cloud Architecture" },
+    {
+      name: "Cloud & DevOps",
+      tools: "GCP, AWS, Docker, Kubernetes, Terraform, Git/Github, CI/CD",
+    },
     { name: "Networking", tools: "TCP/IP, DNS, VPN, Network Design, SSH" },
-    { name: "DevOps", tools: "Docker, Kubernetes, Terraform, Jenkins, CI/CD" },
     {
       name: "Linux Administration",
       tools: "Ubuntu Server, VPS, Bash, systemd, iptables, Ansible",
@@ -349,13 +351,23 @@ export default function App() {
           </div>
           <button
             onClick={() => setIsDark(!isDark)}
-            className={`p-2 border ${borderClass} rounded-lg hover:opacity-70 transition-opacity duration-150 flex-shrink-0`}
+            className="relative p-2 rounded-lg hover:opacity-80 transition-opacity duration-150 flex-shrink-0 overflow-hidden group w-[34px] h-[34px]"
           >
-            {isDark ? (
-              <Sun className="w-4 h-4" />
-            ) : (
-              <Moon className="w-4 h-4" />
-            )}
+            {/* Spinning gradient border */}
+            <div className="absolute inset-[-200%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_70%,#2563eb_100%)] opacity-80" />
+
+            {/* Inner button background */}
+            <div
+              className={`absolute inset-[1px] rounded-[7px] ${bgClass} z-0 flex items-center justify-center`}
+            >
+              <div className="relative z-10">
+                {isDark ? (
+                  <Sun className="w-4 h-4" />
+                ) : (
+                  <Moon className="w-4 h-4" />
+                )}
+              </div>
+            </div>
           </button>
         </div>
       </nav>
@@ -415,7 +427,7 @@ export default function App() {
                     type="text"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Ask me anything... (this feature is coming up soon"
+                    placeholder="Ask me anything... (this feature is coming up soon)"
                     className={`w-full bg-transparent outline-none ${textClass} font-mono placeholder:${mutedClass}`}
                   />
                   {inputValue === "" && (
@@ -695,7 +707,7 @@ export default function App() {
                 className={`border border-dashed ${borderClass} p-5 sm:p-6 rounded-lg flex items-center justify-center col-span-1 md:col-span-2`}
               >
                 <p className="text-sm font-light tracking-wide">
-                  2 PROJECTS UNDER CONSTRUCTION
+                  2 OTHER PROJECTS ARE UNDER CONSTRUCTION
                 </p>
               </motion.div>
             </div>
