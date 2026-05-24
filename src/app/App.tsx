@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Moon, Sun, Github, Linkedin, FileText } from "lucide-react";
+import { Moon, Sun, Github, Linkedin, FileText, ChevronLeft, ChevronRight } from "lucide-react";
 import DotGrid from "./components/DotGrid";
 import CustomCursor from "./components/CustomCursor";
 
@@ -10,7 +10,6 @@ export default function App() {
   const [isDark, setIsDark] = useState(true);
   const [activeSection, setActiveSection] = useState(0);
   const [prevSection, setPrevSection] = useState(0);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -40,11 +39,7 @@ export default function App() {
     const handleScroll = () => {
       const scrollLeft = container.scrollLeft;
       const slideWidth = container.clientWidth;
-      const maxScroll = container.scrollWidth - container.clientWidth;
       const newSection = Math.round(scrollLeft / slideWidth);
-
-      // Update parallax scroll progress (0 to 1)
-      setScrollProgress(maxScroll > 0 ? scrollLeft / maxScroll : 0);
 
       if (newSection !== activeSection) {
         setPrevSection(activeSection);
@@ -127,20 +122,20 @@ export default function App() {
 
   const clubs = [
     {
-      name: "CELEC USTHB",
-      role: "Member",
-      period: "OCT 2022 - OCT 2024",
-      context: "Electronics and embedded systems club",
-    },
-    {
       name: "GDG ESI ALGER",
       role: "Core Team Member",
       period: "OCT 2024 - PRESENT",
       context: "Developper at Google Developer Group community activities",
     },
     {
+      name: "CELEC USTHB",
+      role: "Communication Team Member",
+      period: "OCT 2022 - OCT 2024",
+      context: "Electronics and embedded systems club",
+    },
+    {
       name: "SHELLMATES CLUB ESI ALGER",
-      role: "Member",
+      role: "External Relations Member",
       period: "NOV 2024 - PRESENT",
       context: "Cybersecurity and CTF competitions",
     },
@@ -317,7 +312,7 @@ export default function App() {
       className={`relative w-screen h-screen ${bgClass} ${textClass} font-mono overflow-hidden`}
     >
       {/* Dot Grid Background with parallax */}
-      <DotGrid isDark={isDark} scrollOffset={scrollProgress} />
+      <DotGrid isDark={isDark} />
 
       {/* Custom Cursor */}
       <CustomCursor isDark={isDark} />
@@ -372,6 +367,24 @@ export default function App() {
           </button>
         </div>
       </nav>
+
+      {/* Side Navigation Arrows */}
+      {activeSection > 0 && (
+        <button
+          onClick={() => scrollToSection(activeSection - 1)}
+          className={`fixed left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full border ${borderClass} ${isDark ? "bg-black/40" : "bg-white/40"} backdrop-blur-sm opacity-40 hover:opacity-100 transition-opacity duration-150`}
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+      )}
+      {activeSection < 5 && (
+        <button
+          onClick={() => scrollToSection(activeSection + 1)}
+          className={`fixed right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full border ${borderClass} ${isDark ? "bg-black/40" : "bg-white/40"} backdrop-blur-sm opacity-40 hover:opacity-100 transition-opacity duration-150`}
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+      )}
 
       {/* Horizontal Scroll Container */}
       <div
