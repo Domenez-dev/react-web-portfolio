@@ -12,12 +12,12 @@ export default function CustomCursor({ isDark }: CustomCursorProps) {
   const mousePos = useRef({ x: -100, y: -100 });
   const ringPos = useRef({ x: -100, y: -100 });
   const rafRef = useRef<number>(0);
-  const [isHovering, setIsHovering] = useState(false);
-  const [isClicking, setIsClicking] = useState(false);
+  const isHoveringRef = useRef(false);
+  const isClickingRef = useRef(false);
+  const isVisibleRef = useRef(false);
   const [isVisible, setIsVisible] = useState(false);
   const [useSvgCursor, setUseSvgCursor] = useState(false);
 
-  // Try loading cursor.svg to see if the user provided one
   useEffect(() => {
     const img = new Image();
     img.onload = () => setUseSvgCursor(true);
@@ -28,20 +28,25 @@ export default function CustomCursor({ isDark }: CustomCursorProps) {
   const handleMouseMove = useCallback((e: MouseEvent) => {
     mousePos.current.x = e.clientX;
     mousePos.current.y = e.clientY;
-    if (!isVisible) setIsVisible(true);
-  }, [isVisible]);
+    if (!isVisibleRef.current) {
+      isVisibleRef.current = true;
+      setIsVisible(true);
+    }
+  }, []);
 
   const handleMouseLeave = useCallback(() => {
+    isVisibleRef.current = false;
     setIsVisible(false);
   }, []);
 
   const handleMouseEnter = useCallback(() => {
+    isVisibleRef.current = true;
     setIsVisible(true);
   }, []);
 
   useEffect(() => {
-    const onMouseDown = () => setIsClicking(true);
-    const onMouseUp = () => setIsClicking(false);
+    const onMouseDown = () => { isClickingRef.current = true; };
+    const onMouseUp = () => { isClickingRef.current = false; };
 
     window.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseleave', handleMouseLeave);
@@ -52,13 +57,13 @@ export default function CustomCursor({ isDark }: CustomCursorProps) {
     const onMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (target.closest('button, a, [data-cursor-hover], .cursor-pointer, input, .group')) {
-        setIsHovering(true);
+        isHoveringRef.current = true;
       }
     };
     const onMouseOut = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (target.closest('button, a, [data-cursor-hover], .cursor-pointer, input, .group')) {
-        setIsHovering(false);
+        isHoveringRef.current = false;
       }
     };
 
@@ -85,17 +90,18 @@ export default function CustomCursor({ isDark }: CustomCursorProps) {
         return;
       }
 
-      // Dot follows exactly
+      const hovering = isHoveringRef.current;
+      const clicking = isClickingRef.current;
+
       dot.style.transform = `translate(${mousePos.current.x}px, ${mousePos.current.y}px) translate(-50%, -50%) scale(${
-        isClicking ? 0.6 : isHovering ? 1.5 : 1
+        clicking ? 0.6 : hovering ? 1.5 : 1
       })`;
 
-      // Ring follows with lerp
       ringPos.current.x += (mousePos.current.x - ringPos.current.x) * LERP_FACTOR;
       ringPos.current.y += (mousePos.current.y - ringPos.current.y) * LERP_FACTOR;
 
       ring.style.transform = `translate(${ringPos.current.x}px, ${ringPos.current.y}px) translate(-50%, -50%) scale(${
-        isClicking ? 0.7 : isHovering ? 0.6 : 1
+        clicking ? 0.7 : hovering ? 0.6 : 1
       })`;
 
       rafRef.current = requestAnimationFrame(animate);
@@ -103,11 +109,10 @@ export default function CustomCursor({ isDark }: CustomCursorProps) {
 
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [isHovering, isClicking]);
+  }, []);
 
   const color = isDark ? '#ffffff' : '#000000';
 
-  // If using SVG cursor, show the image as the cursor dot
   if (useSvgCursor) {
     return (
       <>
@@ -160,7 +165,6 @@ export default function CustomCursor({ isDark }: CustomCursorProps) {
 
   return (
     <>
-      {/* Inner dot */}
       <div
         ref={dotRef}
         style={{
@@ -178,7 +182,6 @@ export default function CustomCursor({ isDark }: CustomCursorProps) {
           willChange: 'transform',
         }}
       />
-      {/* Outer ring */}
       <div
         ref={ringRef}
         style={{
