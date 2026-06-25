@@ -6,58 +6,61 @@ import CustomCursor from "./components/CustomCursor";
 
 export default function App() {
   const [inputValue, setInputValue] = useState("");
-  const [showCursor, setShowCursor] = useState(true);
   const [isDark, setIsDark] = useState(true);
   const [activeSection, setActiveSection] = useState(0);
-  const [prevSection, setPrevSection] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setShowCursor((prev) => !prev);
-    }, 530);
-    return () => clearInterval(interval);
-  }, []);
+  // Mirror activeSection in a ref so the scroll/keydown listeners can read the
+  // latest value without being torn down and re-subscribed on every change.
+  const activeSectionRef = useRef(0);
+  activeSectionRef.current = activeSection;
+
+  const scrollToSection = (index: number) => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    const slideWidth = container.clientWidth;
+    container.scrollTo({ left: slideWidth * index, behavior: "smooth" });
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight" && activeSection < 5) {
-        scrollToSection(activeSection + 1);
-      } else if (e.key === "ArrowLeft" && activeSection > 0) {
-        scrollToSection(activeSection - 1);
+      const current = activeSectionRef.current;
+      if (e.key === "ArrowRight" && current < 5) {
+        scrollToSection(current + 1);
+      } else if (e.key === "ArrowLeft" && current > 0) {
+        scrollToSection(current - 1);
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeSection]);
+  }, []);
 
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
-    const handleScroll = () => {
-      const scrollLeft = container.scrollLeft;
+    // rAF-throttle the scroll handler and only setState when the section
+    // actually changes, so a swipe doesn't fire a re-render storm.
+    let ticking = false;
+    const update = () => {
+      ticking = false;
       const slideWidth = container.clientWidth;
-      const newSection = Math.round(scrollLeft / slideWidth);
-
-      if (newSection !== activeSection) {
-        setPrevSection(activeSection);
+      const newSection = Math.round(container.scrollLeft / slideWidth);
+      if (newSection !== activeSectionRef.current) {
         setActiveSection(newSection);
       }
     };
+    const handleScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
 
-    container.addEventListener("scroll", handleScroll);
+    container.addEventListener("scroll", handleScroll, { passive: true });
     return () => container.removeEventListener("scroll", handleScroll);
-  }, [activeSection]);
-
-  const scrollToSection = (index: number) => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-    setPrevSection(activeSection);
-    const slideWidth = container.clientWidth;
-    container.scrollTo({ left: slideWidth * index, behavior: "smooth" });
-  };
+  }, []);
 
   const projects = [
     {
@@ -298,7 +301,7 @@ export default function App() {
     },
   });
 
-  const skillTagBaseClass = `skill-tag border ${borderClass} backdrop-blur-sm px-3 py-1.5 rounded text-sm transition-all duration-150`;
+  const skillTagBaseClass = `skill-tag border ${borderClass} px-3 py-1.5 rounded text-sm transition-all duration-150`;
 
   // Slide transition variants
   const slideVariants = {
@@ -372,7 +375,7 @@ export default function App() {
       {activeSection > 0 && (
         <button
           onClick={() => scrollToSection(activeSection - 1)}
-          className={`fixed left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full border ${borderClass} ${isDark ? "bg-black/40" : "bg-white/40"} backdrop-blur-sm opacity-40 hover:opacity-100 transition-opacity duration-150`}
+          className={`fixed left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full border ${borderClass} ${isDark ? "bg-black/40" : "bg-white/40"} opacity-40 hover:opacity-100 transition-opacity duration-150`}
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
@@ -380,7 +383,7 @@ export default function App() {
       {activeSection < 5 && (
         <button
           onClick={() => scrollToSection(activeSection + 1)}
-          className={`fixed right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full border ${borderClass} ${isDark ? "bg-black/40" : "bg-white/40"} backdrop-blur-sm opacity-40 hover:opacity-100 transition-opacity duration-150`}
+          className={`fixed right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full border ${borderClass} ${isDark ? "bg-black/40" : "bg-white/40"} opacity-40 hover:opacity-100 transition-opacity duration-150`}
         >
           <ChevronRight className="w-5 h-5" />
         </button>
@@ -446,7 +449,7 @@ export default function App() {
                   />
                   {inputValue === "" && (
                     <span
-                      className={`absolute right-4 top-1/2 -translate-y-1/2 w-2 h-5 ${bgSecondaryClass} transition-opacity duration-100 ${showCursor ? "opacity-100" : "opacity-0"}`}
+                      className={`caret-blink absolute right-4 top-1/2 -translate-y-1/2 w-2 h-5 ${bgSecondaryClass}`}
                     />
                   )}
                 </motion.div>
@@ -527,7 +530,7 @@ export default function App() {
                       ? "0 0 8px rgba(255, 255, 255, 0.6)"
                       : "0 0 8px rgba(0, 0, 0, 0.4)",
                   }}
-                  className={`flex items-center gap-2 border ${borderClass} backdrop-blur-sm px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150`}
+                  className={`flex items-center gap-2 border ${borderClass} px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150`}
                 >
                   <Github className="w-4 h-4" />
                   GitHub
@@ -541,7 +544,7 @@ export default function App() {
                     backgroundColor: "rgba(10, 102, 194, 0.2)",
                     boxShadow: "0 0 8px rgba(10, 102, 194, 0.5)",
                   }}
-                  className={`flex items-center gap-2 border backdrop-blur-sm px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150 ${isDark ? "border-white hover:border-[#0A66C2] hover:text-[#0A66C2]" : "border-[#0A66C2] text-[#0A66C2]"}`}
+                  className={`flex items-center gap-2 border px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150 ${isDark ? "border-white hover:border-[#0A66C2] hover:text-[#0A66C2]" : "border-[#0A66C2] text-[#0A66C2]"}`}
                 >
                   <Linkedin className="w-4 h-4" />
                   LinkedIn
@@ -563,7 +566,7 @@ export default function App() {
                       ? "0 0 8px rgba(34, 197, 94, 0.5)"
                       : "0 0 8px rgba(22, 163, 74, 0.5)",
                   }}
-                  className={`flex items-center gap-2 border backdrop-blur-sm px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150 ${isDark ? "border-white hover:border-[#22c55e] hover:text-[#22c55e]" : "border-[#16a34a] text-[#16a34a]"}`}
+                  className={`flex items-center gap-2 border px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150 ${isDark ? "border-white hover:border-[#22c55e] hover:text-[#22c55e]" : "border-[#16a34a] text-[#16a34a]"}`}
                 >
                   <FileText className="w-4 h-4" />
                   Resume
@@ -717,7 +720,7 @@ export default function App() {
                     {project.tech.map((t) => (
                       <span
                         key={t}
-                        className={`text-xs border ${borderClass} backdrop-blur-sm px-2 py-0.5 rounded transition-all duration-150 ${
+                        className={`text-xs border ${borderClass} px-2 py-0.5 rounded transition-all duration-150 ${
                           isDark ? "opacity-90" : "opacity-80"
                         }`}
                         style={getSkillTagStyle(t)}

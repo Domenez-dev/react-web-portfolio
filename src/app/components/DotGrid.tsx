@@ -215,7 +215,7 @@ export default function DotGrid({ isDark }: DotGridProps) {
       mouseRef.current.active = false;
     };
 
-    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
     document.addEventListener("mouseleave", onMouseLeave);
 
     return () => {

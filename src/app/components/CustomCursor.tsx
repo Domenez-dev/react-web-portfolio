@@ -48,11 +48,11 @@ export default function CustomCursor({ isDark }: CustomCursorProps) {
     const onMouseDown = () => { isClickingRef.current = true; };
     const onMouseUp = () => { isClickingRef.current = false; };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave);
     document.addEventListener('mouseenter', handleMouseEnter);
-    window.addEventListener('mousedown', onMouseDown);
-    window.addEventListener('mouseup', onMouseUp);
+    window.addEventListener('mousedown', onMouseDown, { passive: true });
+    window.addEventListener('mouseup', onMouseUp, { passive: true });
 
     const onMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -67,8 +67,8 @@ export default function CustomCursor({ isDark }: CustomCursorProps) {
       }
     };
 
-    document.addEventListener('mouseover', onMouseOver);
-    document.addEventListener('mouseout', onMouseOut);
+    document.addEventListener('mouseover', onMouseOver, { passive: true });
+    document.addEventListener('mouseout', onMouseOut, { passive: true });
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
