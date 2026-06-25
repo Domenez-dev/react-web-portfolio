@@ -15,19 +15,54 @@ export default function App() {
   const activeSectionRef = useRef(0);
   activeSectionRef.current = activeSection;
 
+  // Guards against the snap container advancing more than one slide per arrow
+  // press: lock while a programmatic smooth-scroll is in flight, releasing it
+  // once the scroll lands (or after a safety timeout).
+  const isAnimatingRef = useRef(false);
+  const targetSectionRef = useRef(0);
+  const animTimerRef = useRef<number>(0);
+
   const scrollToSection = (index: number) => {
     const container = scrollContainerRef.current;
     if (!container) return;
+    const target = Math.max(0, Math.min(index, 5));
+    if (target === activeSectionRef.current) return;
+    targetSectionRef.current = target;
+    isAnimatingRef.current = true;
+    clearTimeout(animTimerRef.current);
+    animTimerRef.current = window.setTimeout(() => {
+      isAnimatingRef.current = false;
+    }, 800);
     const slideWidth = container.clientWidth;
-    container.scrollTo({ left: slideWidth * index, behavior: "smooth" });
+    container.scrollTo({ left: slideWidth * target, behavior: "smooth" });
   };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+
+      // Don't hijack arrow keys while typing in a field (caret movement).
+      const ae = document.activeElement as HTMLElement | null;
+      if (
+        ae &&
+        (ae.tagName === "INPUT" ||
+          ae.tagName === "TEXTAREA" ||
+          ae.isContentEditable)
+      ) {
+        return;
+      }
+
+      // We own horizontal navigation — stop the browser's native scroll/snap
+      // from also moving the container (a key cause of double-advancing).
+      e.preventDefault();
+
+      // Ignore auto-repeat from a held key and presses mid-transition.
+      if (e.repeat || isAnimatingRef.current) return;
+
       const current = activeSectionRef.current;
-      if (e.key === "ArrowRight" && current < 5) {
+      if (e.key === "ArrowRight") {
         scrollToSection(current + 1);
-      } else if (e.key === "ArrowLeft" && current > 0) {
+      } else {
         scrollToSection(current - 1);
       }
     };
@@ -49,6 +84,11 @@ export default function App() {
       const newSection = Math.round(container.scrollLeft / slideWidth);
       if (newSection !== activeSectionRef.current) {
         setActiveSection(newSection);
+      }
+      // Release the navigation lock once the programmatic scroll has landed.
+      if (isAnimatingRef.current && newSection === targetSectionRef.current) {
+        isAnimatingRef.current = false;
+        clearTimeout(animTimerRef.current);
       }
     };
     const handleScroll = () => {
@@ -148,19 +188,27 @@ export default function App() {
     {
       name: "Web Development",
       tools: "React, Next.js, Django, Express, TailwindCSS",
+      color: "#3b82f6",
     },
     {
       name: "Web Security",
       tools: "OWASP ZAP, Burp Suite, Penetration Testing",
+      color: "#ef4444",
     },
     {
       name: "Cloud & DevOps",
       tools: "GCP, AWS, Docker, Kubernetes, Terraform, Git/Github, CI/CD",
+      color: "#f59e0b",
     },
-    { name: "Networking", tools: "TCP/IP, DNS, VPN, Network Design, SSH" },
+    {
+      name: "Networking",
+      tools: "TCP/IP, DNS, VPN, Network Design, SSH",
+      color: "#14b8a6",
+    },
     {
       name: "Linux Administration",
       tools: "Ubuntu Server, VPS, Bash, systemd, iptables, Ansible",
+      color: "#a855f7",
     },
   ];
 
@@ -529,8 +577,10 @@ export default function App() {
                     boxShadow: isDark
                       ? "0 0 8px rgba(255, 255, 255, 0.6)"
                       : "0 0 8px rgba(0, 0, 0, 0.4)",
+                    transition: { duration: 0.12, ease: "easeOut" },
                   }}
-                  className={`flex items-center gap-2 border ${borderClass} px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150`}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className={`flex items-center gap-2 border ${borderClass} px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide about-btn`}
                 >
                   <Github className="w-4 h-4" />
                   GitHub
@@ -543,8 +593,10 @@ export default function App() {
                   whileHover={{
                     backgroundColor: "rgba(10, 102, 194, 0.2)",
                     boxShadow: "0 0 8px rgba(10, 102, 194, 0.5)",
+                    transition: { duration: 0.12, ease: "easeOut" },
                   }}
-                  className={`flex items-center gap-2 border px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150 ${isDark ? "border-white hover:border-[#0A66C2] hover:text-[#0A66C2]" : "border-[#0A66C2] text-[#0A66C2]"}`}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className={`flex items-center gap-2 border px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide about-btn ${isDark ? "border-white hover:border-[#0A66C2] hover:text-[#0A66C2]" : "border-[#0A66C2] text-[#0A66C2]"}`}
                 >
                   <Linkedin className="w-4 h-4" />
                   LinkedIn
@@ -565,8 +617,10 @@ export default function App() {
                     boxShadow: isDark
                       ? "0 0 8px rgba(34, 197, 94, 0.5)"
                       : "0 0 8px rgba(22, 163, 74, 0.5)",
+                    transition: { duration: 0.12, ease: "easeOut" },
                   }}
-                  className={`flex items-center gap-2 border px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide transition-all duration-150 ${isDark ? "border-white hover:border-[#22c55e] hover:text-[#22c55e]" : "border-[#16a34a] text-[#16a34a]"}`}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className={`flex items-center gap-2 border px-5 sm:px-6 py-2 rounded-lg text-sm tracking-wide about-btn ${isDark ? "border-white hover:border-[#22c55e] hover:text-[#22c55e]" : "border-[#16a34a] text-[#16a34a]"}`}
                 >
                   <FileText className="w-4 h-4" />
                   Resume
@@ -597,12 +651,22 @@ export default function App() {
                     <motion.div
                       key={index}
                       initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1, duration: 0.4 }}
+                      whileInView={{
+                        opacity: 1,
+                        x: 0,
+                        transition: { delay: index * 0.1, duration: 0.4 },
+                      }}
                       viewport={{ once: false, amount: 0.3 }}
-                      className={`border-l-2 ${isDark ? borderClass : "border-[#2563eb]"} pl-4 py-2`}
+                      whileHover={{ scale: 1.04 }}
+                      transition={{ duration: 0.15, ease: "easeOut" }}
+                      style={
+                        { "--domain-color": domain.color } as React.CSSProperties
+                      }
+                      className={`domain-item group border-l-2 ${isDark ? borderClass : "border-[#2563eb]"} pl-4 py-2 rounded-r-md`}
                     >
-                      <h4 className="font-bold mb-1">{domain.name}</h4>
+                      <h4 className="domain-name font-bold mb-1">
+                        {domain.name}
+                      </h4>
                       <p className={`text-sm ${mutedClass}`}>{domain.tools}</p>
                     </motion.div>
                   ))}
@@ -687,15 +751,20 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.4 }}
+                  whileInView={{
+                    opacity: 1,
+                    y: 0,
+                    transition: { delay: index * 0.1, duration: 0.4 },
+                  }}
                   viewport={{ once: false, amount: 0.3 }}
                   whileHover={{
                     boxShadow: isDark
                       ? "0 0 12px rgba(255, 255, 255, 0.4)"
                       : "0 0 12px rgba(37, 99, 235, 0.35)",
+                    transition: { duration: 0.12, ease: "easeOut" },
                   }}
-                  className={`flex flex-col border ${borderClass} p-5 sm:p-6 rounded-lg transition-all duration-150 group cursor-pointer no-underline ${textClass}`}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className={`flex flex-col border ${borderClass} p-5 sm:p-6 rounded-lg group cursor-pointer no-underline ${textClass}`}
                 >
                   <div className="flex justify-between items-start mb-3">
                     <h3

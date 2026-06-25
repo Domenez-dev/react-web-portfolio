@@ -40,6 +40,32 @@
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
 }
 
+/* ========== Skills · Domain Hover Highlight ========== */
+.domain-name {
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.domain-item {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.domain-item:hover {
+  border-left-color: var(--domain-color);
+  box-shadow: 0 0 18px -4px var(--domain-color);
+}
+
+.domain-item:hover .domain-name {
+  color: var(--domain-color);
+  text-shadow: 0 0 12px color-mix(in srgb, var(--domain-color) 70%, transparent);
+}
+
+/* ========== About · Contact Button Colors ========== */
+/* Background + glow are animated by Framer Motion (fast-in / slow-out); this
+   only covers the Tailwind border/text color hover so they fade smoothly. */
+.about-btn {
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
 /* ========== Slide Transition ========== */
 .slide-content-enter {
   animation: slideIn 0.25s ease-out forwards;
