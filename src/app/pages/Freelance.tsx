@@ -331,6 +331,7 @@ function ProjectModal({
   onClose: () => void;
 }) {
   const confidential = project.status === "CONFIDENTIAL";
+  const subtleBorderClass = isDark ? "border-white/20" : "border-black/20";
   const images = getProjectImages(project);
   const [active, setActive] = useState(0);
   const isMobile = project.platform === "Mobile";
@@ -383,9 +384,9 @@ function ProjectModal({
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="absolute top-3 right-3 z-30 p-2 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm transition-colors duration-150"
+          className={`absolute top-3 right-3 z-30 p-2 rounded-full border ${subtleBorderClass} ${bgClass} ${textClass} hover:border-[#2563eb] hover:text-[#2563eb] transition-colors duration-150`}
         >
-          <X className="w-4 h-4 text-white" />
+          <X className="w-4 h-4" />
         </button>
 
         <div className="overflow-y-auto">
@@ -434,7 +435,7 @@ function ProjectModal({
                   </span>
                 )}
                 {!confidential && (
-                  <span className="text-[10px] sm:text-xs tracking-[0.25em] text-white/70">
+                  <span className="text-[0.833rem] sm:text-xs tracking-[0.25em] text-white/70">
                     SCREENSHOTS COMING SOON
                   </span>
                 )}
@@ -447,19 +448,19 @@ function ProjectModal({
                   type="button"
                   onClick={() => go(-1)}
                   aria-label="Previous image"
-                  className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/45 hover:bg-black/70 backdrop-blur-sm transition-colors duration-150"
+                  className={`absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full border ${subtleBorderClass} ${bgClass} ${textClass} hover:border-[#2563eb] hover:text-[#2563eb] transition-colors duration-150`}
                 >
-                  <ChevronLeft className="w-5 h-5 text-white" />
+                  <ChevronLeft className="w-5 h-5" />
                 </button>
                 <button
                   type="button"
                   onClick={() => go(1)}
                   aria-label="Next image"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/45 hover:bg-black/70 backdrop-blur-sm transition-colors duration-150"
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full border ${subtleBorderClass} ${bgClass} ${textClass} hover:border-[#2563eb] hover:text-[#2563eb] transition-colors duration-150`}
                 >
-                  <ChevronRight className="w-5 h-5 text-white" />
+                  <ChevronRight className="w-5 h-5" />
                 </button>
-                <span className="absolute bottom-3 right-3 z-20 text-[11px] tracking-wider text-white bg-black/45 backdrop-blur-sm px-2.5 py-1 rounded-full">
+                <span className="absolute bottom-3 right-3 z-20 text-[0.917rem] tracking-wider text-white bg-black/45 backdrop-blur-sm px-2.5 py-1 rounded-full">
                   {String(active + 1).padStart(2, "0")} /{" "}
                   {String(images.length).padStart(2, "0")}
                 </span>
@@ -525,7 +526,7 @@ function ProjectModal({
 
             <div className="flex flex-col gap-5">
               <div>
-                <p className={`text-[10px] tracking-[0.25em] mb-2 ${mutedClass}`}>
+                <p className={`text-[0.833rem] tracking-[0.25em] mb-2 ${mutedClass}`}>
                   STATUS
                 </p>
                 <span
@@ -539,7 +540,7 @@ function ProjectModal({
               {!confidential && (
                 <>
                   <div>
-                    <p className={`text-[10px] tracking-[0.25em] mb-2 ${mutedClass}`}>
+                    <p className={`text-[0.833rem] tracking-[0.25em] mb-2 ${mutedClass}`}>
                       STACK
                     </p>
                     <div className="flex flex-wrap gap-1.5">
@@ -718,7 +719,7 @@ export default function Freelance() {
           </Link>
           <button
             onClick={() => setIsDark(!isDark)}
-            className="relative p-2 rounded-lg hover:opacity-80 transition-opacity duration-150 flex-shrink-0 overflow-hidden group w-[34px] h-[34px]"
+            className="relative p-2 rounded-lg flex-shrink-0 overflow-hidden group w-[2.833rem] h-[2.833rem]"
           >
             <div className="absolute inset-[-200%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_70%,#2563eb_100%)] opacity-80" />
             <div
@@ -760,8 +761,10 @@ export default function Freelance() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className={`flex items-start gap-4 rounded-xl border border-[#2563eb]/40 border-l-4 border-l-[#2563eb] ${
-              isDark ? "bg-[#2563eb]/15" : "bg-[#2563eb]/10"
+            className={`flex items-start gap-4 rounded-xl border border-[#2563eb]/40 border-l-4 border-l-[#2563eb] ${bgClass} ${
+              isDark
+                ? "bg-[linear-gradient(#2563eb26,#2563eb26)]"
+                : "bg-[linear-gradient(#2563eb1a,#2563eb1a)]"
             } px-5 py-4 sm:px-6 sm:py-5 mb-10 sm:mb-16`}
           >
             <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#2563eb] text-white flex-shrink-0">
@@ -791,7 +794,7 @@ export default function Freelance() {
             <div className="flex flex-wrap items-end justify-between gap-4 mb-6 sm:mb-8">
               <div>
                 <p
-                  className={`text-[10px] sm:text-xs tracking-[0.25em] mb-2 ${mutedClass}`}
+                  className={`text-[0.833rem] sm:text-xs tracking-[0.25em] mb-2 ${mutedClass}`}
                 >
                   CATALOGUE — {String(freelanceProjects.length).padStart(2, "0")}{" "}
                   ENTRIES
@@ -852,10 +855,10 @@ export default function Freelance() {
                           className="aspect-[4/3]"
                         />
 
-                        <span className="absolute top-3 left-3 z-20 text-[10px] tracking-[0.2em] text-white/85 font-medium">
+                        <span className="absolute top-3 left-3 z-20 text-[0.833rem] tracking-[0.2em] text-white/85 font-medium">
                           NO. {String(catalogueNo).padStart(2, "0")}
                         </span>
-                        <span className="absolute top-2.5 right-2.5 z-20 flex items-center gap-1.5 text-[10px] tracking-wider text-white bg-black/40 backdrop-blur-sm px-2 py-1 rounded-full">
+                        <span className="absolute top-2.5 right-2.5 z-20 flex items-center gap-1.5 text-[0.833rem] tracking-wider text-white bg-black/40 backdrop-blur-sm px-2 py-1 rounded-full">
                           {confidential ? (
                             <Lock className="w-2.5 h-2.5" />
                           ) : (
@@ -886,7 +889,7 @@ export default function Freelance() {
                             {project.title}
                           </h3>
                           <span
-                            className={`flex items-center gap-1 text-[11px] tracking-wide flex-shrink-0 ${mutedClass}`}
+                            className={`flex items-center gap-1 text-[0.917rem] tracking-wide flex-shrink-0 ${mutedClass}`}
                           >
                             {project.platform === "Mobile" ? (
                               <Smartphone className="w-3 h-3" />
@@ -912,7 +915,7 @@ export default function Freelance() {
                             {project.tech.map((t) => (
                               <span
                                 key={t}
-                                className={`skill-tag text-[11px] border ${subtleBorderClass} px-2 py-0.5 rounded transition-all duration-150`}
+                                className={`skill-tag text-[0.917rem] border ${subtleBorderClass} px-2 py-0.5 rounded transition-all duration-150`}
                                 style={getSkillTagStyle(t)}
                                 {...skillTagHoverHandlers(t)}
                               >
@@ -930,7 +933,7 @@ export default function Freelance() {
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1, transition: { delay: 0.35 } }}
                   viewport={{ once: false, amount: 0.2 }}
-                  className={`border border-dashed ${borderClass} rounded-xl flex flex-col items-center justify-center gap-2 p-6 min-h-[200px] ${mutedClass}`}
+                  className={`border border-dashed ${borderClass} ${bgClass} rounded-xl flex flex-col items-center justify-center gap-2 p-6 min-h-[200px] ${mutedClass}`}
                 >
                   <span className="text-2xl font-light leading-none">+</span>
                   <p className="text-xs tracking-[0.2em]">MORE PROJECTS INCOMING</p>
@@ -967,7 +970,7 @@ export default function Freelance() {
             </div>
             <Link
               to="/leave-feedback"
-              className="text-xs sm:text-sm tracking-wider border border-[#2563eb] text-[#2563eb] bg-[#2563eb]/10 px-3 py-1.5 rounded-full hover:bg-[#2563eb]/20 transition-colors duration-150 whitespace-nowrap"
+              className={`text-xs sm:text-sm tracking-wider border border-[#2563eb] text-[#2563eb] ${bgClass} bg-[linear-gradient(#2563eb1a,#2563eb1a)] px-3 py-1.5 rounded-full hover:bg-[linear-gradient(#2563eb33,#2563eb33)] transition-colors duration-150 whitespace-nowrap`}
             >
               Worked with me? Leave feedback →
             </Link>
@@ -1003,7 +1006,7 @@ export default function Freelance() {
                     transition: { delay: index * 0.05, duration: 0.4 },
                   }}
                   viewport={{ once: false, amount: 0.3 }}
-                  className={`flex flex-col gap-4 border ${borderClass} p-5 sm:p-6 rounded-lg`}
+                  className={`flex flex-col gap-4 border ${borderClass} ${bgClass} p-5 sm:p-6 rounded-lg`}
                 >
                   <div className="flex items-center gap-3">
                     <img
@@ -1040,7 +1043,7 @@ export default function Freelance() {
               <div
                 className={`p-6 sm:p-10 border-b lg:border-b-0 lg:border-r ${subtleBorderClass}`}
               >
-                <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs tracking-[0.2em] border border-[#2563eb] text-[#2563eb] bg-[#2563eb]/10 px-3 py-1 rounded-full mb-5">
+                <span className="inline-flex items-center gap-1.5 text-[0.833rem] sm:text-xs tracking-[0.2em] border border-[#2563eb] text-[#2563eb] bg-[#2563eb]/10 px-3 py-1 rounded-full mb-5">
                   <MapPin className="w-3 h-3" />
                   ALGERIA · AUTO-ENTREPRENEUR
                 </span>
@@ -1058,7 +1061,7 @@ export default function Freelance() {
                   I hold an auto-entrepreneur status for Algerian clients.
                 </p>
 
-                <p className={`text-[10px] sm:text-xs tracking-[0.25em] mb-3 ${mutedClass}`}>
+                <p className={`text-[0.833rem] sm:text-xs tracking-[0.25em] mb-3 ${mutedClass}`}>
                   AVAILABLE FOR
                 </p>
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -1072,7 +1075,7 @@ export default function Freelance() {
                         transition: { delay: 0.1 + i * 0.05, duration: 0.3 },
                       }}
                       viewport={{ once: true }}
-                      className={`flex items-center gap-3 border ${subtleBorderClass} rounded-lg px-3 py-2.5 hover:border-[#2563eb] transition-colors duration-150`}
+                      className={`flex items-center gap-3 border ${subtleBorderClass} ${bgClass} rounded-lg px-3 py-2.5 hover:border-[#2563eb] transition-colors duration-150`}
                     >
                       <span className="flex items-center justify-center w-8 h-8 rounded-md bg-[#2563eb]/15 text-[#2563eb] flex-shrink-0">
                         <Icon className="w-4 h-4" />
@@ -1094,14 +1097,14 @@ export default function Freelance() {
                   >
                     <a
                       href={`mailto:${contactEmail}`}
-                      className="group flex items-center gap-3 h-full border border-dashed border-[#2563eb] bg-[#2563eb]/5 hover:bg-[#2563eb]/15 rounded-lg px-3 py-2.5 transition-colors duration-150"
+                      className={`group flex items-center gap-3 h-full border border-dashed border-[#2563eb] ${bgClass} bg-[linear-gradient(#2563eb0d,#2563eb0d)] hover:bg-[linear-gradient(#2563eb26,#2563eb26)] rounded-lg px-3 py-2.5 transition-colors duration-150`}
                     >
                       <span className="flex items-center justify-center w-8 h-8 rounded-md bg-[#2563eb] text-white flex-shrink-0">
                         <Plus className="w-4 h-4 transition-transform duration-200 group-hover:rotate-90" />
                       </span>
                       <span className="flex flex-col">
                         <span className="text-xs sm:text-sm">Un autre besoin ?</span>
-                        <span className={`text-[11px] ${mutedClass}`}>
+                        <span className={`text-[0.917rem] ${mutedClass}`}>
                           Parlons-en
                         </span>
                       </span>
@@ -1112,7 +1115,7 @@ export default function Freelance() {
 
               {/* Process */}
               <div className="p-6 sm:p-10">
-                <p className={`text-[10px] sm:text-xs tracking-[0.25em] mb-6 ${mutedClass}`}>
+                <p className={`text-[0.833rem] sm:text-xs tracking-[0.25em] mb-6 ${mutedClass}`}>
                   HOW IT WORKS
                 </p>
                 <ol className="relative">
@@ -1130,13 +1133,13 @@ export default function Freelance() {
                     >
                       {i < connectSteps.length - 1 && (
                         <span
-                          className={`absolute left-[15px] top-8 bottom-0 w-px ${
+                          className={`absolute left-[calc(1rem-0.5px)] top-8 bottom-0 w-px ${
                             isDark ? "bg-white/20" : "bg-black/20"
                           }`}
                         />
                       )}
                       <span
-                        className={`relative z-10 flex items-center justify-center w-8 h-8 rounded-full border text-[11px] flex-shrink-0 ${bgClass} ${
+                        className={`relative z-10 flex items-center justify-center w-8 h-8 rounded-full border text-[0.917rem] flex-shrink-0 ${bgClass} ${
                           i === 0
                             ? "border-[#2563eb] text-[#2563eb]"
                             : subtleBorderClass
@@ -1189,7 +1192,7 @@ export default function Freelance() {
                   type="button"
                   onClick={copyEmail}
                   aria-label="Copy email address"
-                  className={`inline-flex items-center gap-2 text-xs sm:text-sm border ${borderClass} px-4 py-2.5 rounded-lg hover:opacity-80 transition-opacity duration-150 max-w-full`}
+                  className={`inline-flex items-center gap-2 text-xs sm:text-sm border ${borderClass} ${bgClass} px-4 py-2.5 rounded-lg hover:border-[#2563eb] hover:text-[#2563eb] transition-colors duration-150 max-w-full`}
                 >
                   <span className="truncate">{contactEmail}</span>
                   {emailCopied ? (

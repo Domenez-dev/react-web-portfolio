@@ -30,7 +30,7 @@ export default function LeaveFeedback() {
   const textClass = isDark ? "text-white" : "text-black";
   const borderClass = isDark ? "border-white" : "border-black";
   const mutedClass = isDark ? "text-white/50" : "text-black/50";
-  const inputBgClass = isDark ? "bg-white/[0.03]" : "bg-black/[0.02]";
+  const inputBgClass = isDark ? "bg-[#080808]" : "bg-[#fafafa]";
 
   const validate = () => {
     const trimmedName = name.trim();
@@ -110,7 +110,7 @@ export default function LeaveFeedback() {
           </Link>
           <button
             onClick={() => setIsDark(!isDark)}
-            className="relative p-2 rounded-lg hover:opacity-80 transition-opacity duration-150 flex-shrink-0 overflow-hidden group w-[34px] h-[34px]"
+            className="relative p-2 rounded-lg flex-shrink-0 overflow-hidden group w-[2.833rem] h-[2.833rem]"
           >
             <div className="absolute inset-[-200%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_70%,#2563eb_100%)] opacity-80" />
             <div
@@ -138,7 +138,7 @@ export default function LeaveFeedback() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className={`border ${borderClass} rounded-lg p-8 sm:p-10 text-center`}
+                className={`border ${borderClass} ${bgClass} rounded-lg p-8 sm:p-10 text-center`}
               >
                 <CheckCircle2 className="w-10 h-10 mx-auto mb-4 text-[#2563eb]" />
                 <h1
@@ -154,13 +154,13 @@ export default function LeaveFeedback() {
                 <div className="flex flex-wrap items-center justify-center gap-3">
                   <button
                     onClick={resetForm}
-                    className={`text-xs sm:text-sm tracking-wider border ${borderClass} px-5 py-2 rounded-lg hover:opacity-80 transition-opacity duration-150`}
+                    className={`text-xs sm:text-sm tracking-wider border ${borderClass} ${bgClass} px-5 py-2 rounded-lg hover:border-[#2563eb] hover:text-[#2563eb] transition-colors duration-150`}
                   >
                     Submit another response
                   </button>
                   <Link
                     to="/freelance"
-                    className="text-xs sm:text-sm tracking-wider border border-[#2563eb] text-[#2563eb] bg-[#2563eb]/10 px-5 py-2 rounded-lg hover:bg-[#2563eb]/20 transition-colors duration-150"
+                    className={`text-xs sm:text-sm tracking-wider border border-[#2563eb] text-[#2563eb] ${bgClass} bg-[linear-gradient(#2563eb1a,#2563eb1a)] px-5 py-2 rounded-lg hover:bg-[linear-gradient(#2563eb33,#2563eb33)] transition-colors duration-150`}
                   >
                     View freelance page
                   </Link>
@@ -292,7 +292,7 @@ export default function LeaveFeedback() {
                   <button
                     type="submit"
                     disabled={status === "submitting"}
-                    className={`w-full border ${borderClass} rounded-lg py-3 text-sm tracking-widest hover:opacity-80 transition-opacity duration-150 disabled:opacity-40`}
+                    className={`w-full border ${borderClass} ${bgClass} rounded-lg py-3 text-sm tracking-widest hover:border-[#2563eb] hover:text-[#2563eb] transition-colors duration-150 ${isDark ? "disabled:border-white/40 disabled:text-white/40" : "disabled:border-black/40 disabled:text-black/40"} disabled:hover:border-current`}
                   >
                     {status === "submitting" ? "SUBMITTING..." : "SUBMIT FEEDBACK"}
                   </button>

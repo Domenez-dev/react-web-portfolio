@@ -371,7 +371,7 @@ export default function App() {
             ))}
             <Link
               to="/freelance"
-              className="flex items-center gap-1.5 text-sm tracking-wider whitespace-nowrap flex-shrink-0 border border-[#2563eb] text-[#2563eb] bg-[#2563eb]/10 px-3 py-1 rounded-full transition-all duration-150 hover:bg-[#2563eb]/20"
+              className={`flex items-center gap-1.5 text-sm tracking-wider whitespace-nowrap flex-shrink-0 border border-[#2563eb] text-[#2563eb] ${bgClass} bg-[linear-gradient(#2563eb1a,#2563eb1a)] px-3 py-1 rounded-full transition-all duration-150 hover:bg-[linear-gradient(#2563eb33,#2563eb33)]`}
               style={{ boxShadow: "0 0 0px rgba(37, 99, 235, 0)" }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.boxShadow = "0 0 8px rgba(37, 99, 235, 0.5)";
@@ -410,7 +410,7 @@ export default function App() {
           <div className="flex items-center gap-2 flex-shrink-0">
             <Link
               to="/freelance"
-              className="md:hidden flex items-center gap-1.5 text-xs tracking-wider whitespace-nowrap border border-[#2563eb] text-[#2563eb] bg-[#2563eb]/10 px-2.5 py-1 rounded-full"
+              className={`md:hidden flex items-center gap-1.5 text-xs tracking-wider whitespace-nowrap border border-[#2563eb] text-[#2563eb] ${bgClass} bg-[linear-gradient(#2563eb1a,#2563eb1a)] px-2.5 py-1 rounded-full`}
             >
               <Briefcase className="w-3 h-3" />
               Freelance
@@ -418,7 +418,7 @@ export default function App() {
             <button
               onClick={() => setIsDark(!isDark)}
               aria-label="Toggle theme"
-              className="relative p-2 rounded-lg hover:opacity-80 transition-opacity duration-150 flex-shrink-0 overflow-hidden group w-[34px] h-[34px]"
+              className="relative p-2 rounded-lg flex-shrink-0 overflow-hidden group w-[2.833rem] h-[2.833rem]"
             >
               {/* Spinning gradient border */}
               <div className="absolute inset-[-200%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_70%,#2563eb_100%)] opacity-80" />
@@ -492,7 +492,7 @@ export default function App() {
       {activeSection > 0 && (
         <button
           onClick={() => scrollToSection(activeSection - 1)}
-          className={`fixed left-3 sm:left-5 bottom-5 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 z-30 p-2 rounded-full border ${borderClass} ${isDark ? "bg-black/40" : "bg-white/40"} opacity-40 hover:opacity-100 transition-opacity duration-150`}
+          className={`fixed left-3 sm:left-5 bottom-5 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 z-30 p-2 rounded-full border ${bgClass} ${isDark ? "border-white/40 text-white/40 hover:border-white hover:text-white" : "border-black/40 text-black/40 hover:border-black hover:text-black"} transition-colors duration-150`}
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
@@ -500,7 +500,7 @@ export default function App() {
       {activeSection < 5 && (
         <button
           onClick={() => scrollToSection(activeSection + 1)}
-          className={`fixed right-3 sm:right-5 bottom-5 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 z-30 p-2 rounded-full border ${borderClass} ${isDark ? "bg-black/40" : "bg-white/40"} opacity-40 hover:opacity-100 transition-opacity duration-150`}
+          className={`fixed right-3 sm:right-5 bottom-5 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 z-30 p-2 rounded-full border ${bgClass} ${isDark ? "border-white/40 text-white/40 hover:border-white hover:text-white" : "border-black/40 text-black/40 hover:border-black hover:text-black"} transition-colors duration-150`}
         >
           <ChevronRight className="w-5 h-5" />
         </button>
@@ -555,7 +555,7 @@ export default function App() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.7, duration: 0.6 }}
-                  className={`relative w-full md:w-2/3 border ${borderClass} p-4 rounded-lg bg-transparent`}
+                  className={`relative w-full md:w-2/3 border ${borderClass} p-4 rounded-lg ${bgClass}`}
                 >
                   <input
                     type="text"
@@ -576,8 +576,8 @@ export default function App() {
         </section>
 
         {/* Slide 2 - About */}
-        <section className="min-w-full w-screen h-full snap-start flex items-center justify-center px-6 sm:px-8 md:px-16 lg:px-24">
-          <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+        <section className="min-w-full w-screen h-full snap-start flex overflow-y-auto px-6 sm:px-8 md:px-16 lg:px-24">
+          <div className="m-auto py-8 w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
             <div className="flex items-center justify-center">
               <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 rounded-full flex items-center justify-center overflow-hidden group">
                 {/* Counter-clockwise spinning border */}
@@ -635,14 +635,10 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
-                    backgroundColor: isDark
-                      ? "rgba(255,255,255,0.05)"
-                      : "rgba(0,0,0,0.05)",
+                    backgroundColor: isDark ? "#0d0d0d" : "#f2f2f2",
                   }}
                   whileHover={{
-                    backgroundColor: isDark
-                      ? "rgba(255,255,255,0.15)"
-                      : "rgba(0,0,0,0.15)",
+                    backgroundColor: isDark ? "#262626" : "#d9d9d9",
                     boxShadow: isDark
                       ? "0 0 8px rgba(255, 255, 255, 0.6)"
                       : "0 0 8px rgba(0, 0, 0, 0.4)",
@@ -658,9 +654,9 @@ export default function App() {
                   href="https://linkedin.com/in/zakaria-bouzara"
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ backgroundColor: "rgba(10, 102, 194, 0.1)" }}
+                  style={{ backgroundColor: isDark ? "#010a13" : "#e7f0f9" }}
                   whileHover={{
-                    backgroundColor: "rgba(10, 102, 194, 0.2)",
+                    backgroundColor: isDark ? "#021427" : "#cee0f3",
                     boxShadow: "0 0 8px rgba(10, 102, 194, 0.5)",
                     transition: { duration: 0.12, ease: "easeOut" },
                   }}
@@ -675,14 +671,10 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
-                    backgroundColor: isDark
-                      ? "rgba(34, 197, 94, 0.1)"
-                      : "rgba(22, 163, 74, 0.1)",
+                    backgroundColor: isDark ? "#031409" : "#e8f6ed",
                   }}
                   whileHover={{
-                    backgroundColor: isDark
-                      ? "rgba(34, 197, 94, 0.2)"
-                      : "rgba(22, 163, 74, 0.2)",
+                    backgroundColor: isDark ? "#072713" : "#d0eddb",
                     boxShadow: isDark
                       ? "0 0 8px rgba(34, 197, 94, 0.5)"
                       : "0 0 8px rgba(22, 163, 74, 0.5)",
@@ -700,8 +692,8 @@ export default function App() {
         </section>
 
         {/* Slide 3 - Skills */}
-        <section className="min-w-full w-screen h-full snap-start flex items-center justify-center px-6 sm:px-8 md:px-16 lg:px-24">
-          <div className="w-full max-w-6xl">
+        <section className="min-w-full w-screen h-full snap-start flex overflow-y-auto px-6 sm:px-8 md:px-16 lg:px-24">
+          <div className="m-auto py-8 w-full max-w-6xl">
             <h2
               className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 sm:mb-12"
               style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
@@ -731,7 +723,7 @@ export default function App() {
                       style={
                         { "--domain-color": domain.color } as React.CSSProperties
                       }
-                      className={`domain-item group border-l-2 ${isDark ? borderClass : "border-[#2563eb]"} pl-4 py-2 rounded-r-md`}
+                      className={`domain-item group border-l-2 ${isDark ? borderClass : "border-[#2563eb]"} pl-4 py-2 rounded-r-md ${bgClass}`}
                     >
                       <h4 className="domain-name font-bold mb-1">
                         {domain.name}
@@ -803,8 +795,8 @@ export default function App() {
         </section>
 
         {/* Slide 4 - Projects */}
-        <section className="min-w-full w-screen h-full snap-start flex items-center justify-center px-6 sm:px-8 md:px-16 lg:px-24">
-          <div className="w-full max-w-6xl">
+        <section className="min-w-full w-screen h-full snap-start flex overflow-y-auto px-6 sm:px-8 md:px-16 lg:px-24">
+          <div className="m-auto py-8 w-full max-w-6xl">
             <h2
               className="text-3xl sm:text-4xl md:text-5xl font-bold mb-10 sm:mb-16"
               style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
@@ -812,7 +804,7 @@ export default function App() {
               PROJECTS
             </h2>
 
-            <div className={`border ${borderClass} rounded-lg overflow-hidden`}>
+            <div className={`border ${borderClass} ${bgClass} rounded-lg overflow-hidden`}>
               {projects.map((project, index) => {
                 const isOpen = expandedProject === index;
                 return (
@@ -951,8 +943,8 @@ export default function App() {
         </section>
 
         {/* Slide 6 - Contact */}
-        <section className="min-w-full w-screen h-full snap-start flex items-center justify-center px-6 sm:px-8 md:px-16 lg:px-24">
-          <div className="w-full max-w-3xl text-center">
+        <section className="min-w-full w-screen h-full snap-start flex overflow-y-auto px-6 sm:px-8 md:px-16 lg:px-24">
+          <div className="m-auto py-8 w-full max-w-3xl text-center">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -979,7 +971,7 @@ export default function App() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}
               viewport={{ once: false, amount: 0.3 }}
-              className={`border ${borderClass} rounded-lg mb-8 sm:mb-12 overflow-hidden`}
+              className={`border ${borderClass} ${bgClass} rounded-lg mb-8 sm:mb-12 overflow-hidden`}
             >
               {[
                 {

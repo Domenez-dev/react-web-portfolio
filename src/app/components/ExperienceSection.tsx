@@ -129,7 +129,7 @@ export default function ExperienceSection({ isDark }: { isDark: boolean }) {
 
   const mutedClass = isDark ? "text-white/50" : "text-black/50";
   const subtleBorder = isDark ? "border-white/15" : "border-black/15";
-  const cardBg = isDark ? "bg-black/60" : "bg-white/70";
+  const pageBg = isDark ? "#000000" : "#ffffff";
   const lineClass = isDark ? "bg-white/20" : "bg-black/20";
 
   return (
@@ -162,29 +162,29 @@ export default function ExperienceSection({ isDark }: { isDark: boolean }) {
                 role="tab"
                 aria-selected={selected}
                 onClick={() => setActiveKey(c.key)}
-                className={`group flex items-center gap-2 lg:gap-3 px-3 py-2.5 lg:py-3 rounded-lg border text-left transition-all duration-200 ${
-                  selected ? "" : `${subtleBorder} opacity-60 hover:opacity-100`
+                className={`group flex items-center justify-center lg:justify-start gap-2 lg:gap-3 px-2 sm:px-3 py-2.5 lg:py-3 rounded-lg border text-left transition-[color,border-color,box-shadow] duration-200 ${
+                  selected ? "" : `${subtleBorder} ${isDark ? "text-white/60 hover:text-white" : "text-black/60 hover:text-black"}`
                 }`}
                 style={
                   selected
                     ? {
                         borderColor: color,
                         color,
-                        backgroundColor: `${color}14`,
+                        background: `linear-gradient(${color}14, ${color}14), ${pageBg}`,
                         boxShadow: `0 0 18px -6px ${color}`,
                       }
-                    : undefined
+                    : { backgroundColor: pageBg }
                 }
               >
                 <span className="hidden lg:inline text-xs opacity-60">
                   {pad(i + 1)}
                 </span>
-                <Icon className="w-4 h-4 flex-shrink-0" />
+                <Icon className="hidden sm:block w-4 h-4 flex-shrink-0" />
                 <span className="text-xs sm:text-sm tracking-wide truncate">
                   <span className="lg:hidden">{c.short}</span>
                   <span className="hidden lg:inline">{c.label}</span>
                 </span>
-                <span className="hidden sm:inline ml-auto text-xs opacity-60">
+                <span className="hidden lg:inline ml-auto text-xs opacity-60">
                   {pad(c.entries.length)}
                 </span>
               </button>
@@ -203,10 +203,10 @@ export default function ExperienceSection({ isDark }: { isDark: boolean }) {
           transition={{ duration: 0.25, ease: "easeOut" }}
           className="relative pl-8 sm:pl-10 space-y-4 sm:space-y-5"
         >
-          {/* Line: 1px wide, its center sits at 7.5px — same as the 15px dots */}
+          {/* Line: 1px wide, its center sits at 0.625rem — same as the 1.25rem dots */}
           <span
             aria-hidden
-            className={`absolute left-[7px] top-[24px] bottom-[24px] w-px ${lineClass}`}
+            className={`absolute left-[calc(0.625rem-0.5px)] top-8 bottom-8 w-px ${lineClass}`}
           />
 
           {active.entries.map((entry, index) => (
@@ -220,7 +220,7 @@ export default function ExperienceSection({ isDark }: { isDark: boolean }) {
               {/* Dot, vertically aligned with the card title */}
               <span
                 aria-hidden
-                className="absolute -left-8 sm:-left-10 top-[16.5px] sm:top-[19.5px] w-[15px] h-[15px] flex items-center justify-center"
+                className="absolute -left-8 sm:-left-10 top-[calc(1.2917rem+1px)] sm:top-[calc(1.5417rem+1px)] w-5 h-5 flex items-center justify-center"
               >
                 {entry.current && (
                   <span
@@ -229,34 +229,34 @@ export default function ExperienceSection({ isDark }: { isDark: boolean }) {
                   />
                 )}
                 <span
-                  className={`relative w-[15px] h-[15px] rounded-full border-2 ${isDark ? "bg-black" : "bg-white"}`}
+                  className={`relative w-5 h-5 rounded-full border-2 ${isDark ? "bg-black" : "bg-white"}`}
                   style={{ borderColor: accent }}
                 >
                   <span
-                    className="absolute inset-[3px] rounded-full"
+                    className="absolute inset-1 rounded-full"
                     style={{ backgroundColor: accent }}
                   />
                 </span>
               </span>
 
               <div
-                className={`experience-card rounded-lg border ${subtleBorder} ${cardBg} backdrop-blur-sm p-4 sm:p-5`}
-                style={{ "--card-color": accent } as React.CSSProperties}
+                className={`experience-card rounded-lg border ${subtleBorder} p-4 sm:p-5`}
+                style={{ "--card-color": accent, backgroundColor: pageBg } as React.CSSProperties}
               >
                 <div className="flex items-start justify-between gap-3">
                   <h3
-                    className="text-base sm:text-lg font-bold leading-[22px]"
+                    className="text-base sm:text-lg font-bold leading-[1.833rem]"
                     style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
                   >
                     {entry.title}
                   </h3>
                   {entry.badge && (
                     <span
-                      className="text-[10px] sm:text-xs tracking-wider border px-2 py-0.5 rounded flex-shrink-0"
+                      className="text-[0.833rem] sm:text-xs tracking-wider border px-2 py-0.5 rounded flex-shrink-0"
                       style={{
                         borderColor: accent,
                         color: accent,
-                        backgroundColor: `${accent}14`,
+                        background: `linear-gradient(${accent}14, ${accent}14), ${pageBg}`,
                       }}
                     >
                       {entry.badge}
