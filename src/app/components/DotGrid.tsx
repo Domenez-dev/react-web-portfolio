@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback } from "react";
+import { useIsLite } from "../lib/performance";
 
 interface DotGridProps {
   isDark: boolean;
@@ -28,6 +29,8 @@ export default function DotGrid({ isDark }: DotGridProps) {
   const mouseRef = useRef({ x: -1000, y: -1000, active: false });
   const rafRef = useRef<number>(0);
   const isDarkRef = useRef(isDark);
+  // Lite mode: draw the grid once and skip the mouse-reactive animation loop.
+  const isLite = useIsLite();
 
   isDarkRef.current = isDark;
 
@@ -198,11 +201,24 @@ export default function DotGrid({ isDark }: DotGridProps) {
     buildGrid();
     drawStatic();
 
+    // Coalesce resize bursts (e.g. mobile address bar) into one rebuild per frame.
+    let resizeRaf = 0;
     const onResize = () => {
-      buildGrid();
-      drawStatic();
+      if (resizeRaf) return;
+      resizeRaf = requestAnimationFrame(() => {
+        resizeRaf = 0;
+        buildGrid();
+        drawStatic();
+      });
     };
     window.addEventListener("resize", onResize);
+
+    if (isLite) {
+      return () => {
+        window.removeEventListener("resize", onResize);
+        cancelAnimationFrame(resizeRaf);
+      };
+    }
 
     const onMouseMove = (e: MouseEvent) => {
       mouseRef.current.x = e.clientX;
@@ -220,6 +236,7 @@ export default function DotGrid({ isDark }: DotGridProps) {
 
     return () => {
       window.removeEventListener("resize", onResize);
+      cancelAnimationFrame(resizeRaf);
       window.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseleave", onMouseLeave);
       if (rafRef.current) {
@@ -227,12 +244,12 @@ export default function DotGrid({ isDark }: DotGridProps) {
         rafRef.current = 0;
       }
     };
-  }, [buildGrid, drawStatic, startLoop]);
+  }, [buildGrid, drawStatic, startLoop, isLite]);
 
   useEffect(() => {
     drawStatic();
-    startLoop();
-  }, [isDark, drawStatic, startLoop]);
+    if (!isLite) startLoop();
+  }, [isDark, isLite, drawStatic, startLoop]);
 
   return (
     <canvas

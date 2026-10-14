@@ -1,12 +1,35 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { useIsLite } from '../lib/performance';
 
 interface CustomCursorProps {
   isDark: boolean;
 }
 
 const LERP_FACTOR = 0.15;
+const FINE_POINTER_QUERY = '(hover: hover) and (pointer: fine)';
 
-export default function CustomCursor({ isDark }: CustomCursorProps) {
+function useHasFinePointer() {
+  const [fine, setFine] = useState(() => window.matchMedia(FINE_POINTER_QUERY).matches);
+  useEffect(() => {
+    const mql = window.matchMedia(FINE_POINTER_QUERY);
+    const onChange = () => setFine(mql.matches);
+    mql.addEventListener('change', onChange);
+    return () => mql.removeEventListener('change', onChange);
+  }, []);
+  return fine;
+}
+
+// The cursor runs a rAF loop every frame, so only mount it where it's visible
+// (mouse/trackpad) and the device isn't in lite mode. The native cursor is
+// restored by CSS in those cases.
+export default function CustomCursor(props: CustomCursorProps) {
+  const isLite = useIsLite();
+  const hasFinePointer = useHasFinePointer();
+  if (isLite || !hasFinePointer) return null;
+  return <CursorFollower {...props} />;
+}
+
+function CursorFollower({ isDark }: CustomCursorProps) {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const mousePos = useRef({ x: -100, y: -100 });

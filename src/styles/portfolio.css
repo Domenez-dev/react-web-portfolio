@@ -1,6 +1,10 @@
 /* ========== Custom Cursor ========== */
-* {
-  cursor: none !important;
+/* Only hide the native cursor where the custom one is actually rendered:
+   mouse/trackpad devices that aren't in lite mode. */
+@media (hover: hover) and (pointer: fine) {
+  html:not([data-perf="lite"]) * {
+    cursor: none !important;
+  }
 }
 
 /* ========== Blinking Caret (CSS-driven, no React re-render) ========== */
@@ -94,13 +98,6 @@
   .portfolio-nav-links::-webkit-scrollbar {
     display: none;
   }
-
-  /* Hide custom cursor on touch devices */
-  @media (pointer: coarse) {
-    * {
-      cursor: auto !important;
-    }
-  }
 }
 
 /* ========== Experience Cards ========== */
@@ -112,4 +109,29 @@
   border-color: var(--card-color);
   box-shadow: 0 0 22px -8px var(--card-color);
   transform: translateX(2px);
+}
+
+/* ========== Lite Mode (low-spec devices) ==========
+   Set on <html data-perf="lite"> by src/app/lib/performance.ts. Drops the
+   effects that are expensive to composite on old GPUs. */
+html[data-perf="lite"] .noise-overlay,
+html[data-perf="lite"] .blur-3xl {
+  display: none;
+}
+
+html[data-perf="lite"] [class*="backdrop-blur"] {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Without the blur, translucent bars need to be near-opaque to stay legible. */
+html[data-perf="lite"] nav.bg-black\/70 { background-color: rgb(0 0 0 / 0.94); }
+html[data-perf="lite"] nav.bg-white\/70 { background-color: rgb(255 255 255 / 0.94); }
+html[data-perf="lite"] nav.bg-\[\#0a1830\]\/70 { background-color: rgb(10 24 48 / 0.96); }
+html[data-perf="lite"] nav.bg-\[\#eaf1fe\]\/70 { background-color: rgb(234 241 254 / 0.96); }
+html[data-perf="lite"] .bg-black\/45,
+html[data-perf="lite"] .bg-black\/40 { background-color: rgb(0 0 0 / 0.7); }
+
+html[data-perf="lite"] .shadow-2xl {
+  box-shadow: none;
 }
