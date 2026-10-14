@@ -1,13 +1,16 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router";
 import { AnimatePresence, motion } from "motion/react";
-import { Moon, Sun, Github, Linkedin, FileText, ChevronLeft, ChevronRight } from "lucide-react";
+import { Moon, Sun, Github, Linkedin, FileText, ChevronLeft, ChevronRight, Briefcase, ChevronDown, MapPin } from "lucide-react";
 import DotGrid from "./components/DotGrid";
 import CustomCursor from "./components/CustomCursor";
+import { useTheme } from "./hooks/useTheme";
 
 export default function App() {
   const [inputValue, setInputValue] = useState("");
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useTheme(true);
   const [activeSection, setActiveSection] = useState(0);
+  const [expandedProject, setExpandedProject] = useState<number | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Mirror activeSection in a ref so the scroll/keydown listeners can read the
@@ -102,29 +105,39 @@ export default function App() {
     return () => container.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const projects = [
-    {
-      title: "SYNERA",
-      description:
-        "E-commerce Platform dedicated for algerian female community",
-      status: "COMPLETED",
-      url: "#",
-      tech: ["React", "PostgreSQL", "Supabase", "Netlify"],
-    },
+  const projects: {
+    title: string;
+    description: string;
+    status: string;
+    url: string;
+    org?: string;
+    tech: string[];
+  }[] = [
     {
       title: "Hyperconverged Cloud Infrastructure (HCI)",
       description:
         "Architected and deployed a highly available hyperconverged infrastructure, integrating compute, storage, and networking into a single software-defined pool",
-      status: "IN DEV",
-      url: "#",
+      status: "COMPLETED",
+      url: "https://github.com/Domenez-dev/Hyper-Converged-Infrastructure-HCI",
+      org: "Sonatrach, Algiers",
       tech: ["Proxmox", "Ceph", "KVM", "Open vSwitch", "Ansible"],
+    },
+    {
+      title: "Deployment of a Monitoring Solution",
+      description:
+        "Dashboards for database activity and microservices health built from metrics, logs and syslog, with Alertmanager routing critical alerts to the notifications service.",
+      org: "Amana Assurances, Algiers",
+      status: "COMPLETED",
+      url: "",
+      tech: ["Grafana", "Prometheus", "Loki", "Syslog", "Alertmanager"],
     },
     {
       title: "WIKAYANET",
       description:
         "A Secure web platform using Django and ExpressJS to deliver real-time security updates and news.",
       status: "COMPLETED",
-      url: "#",
+      url: "https://wikayanet.dz/",
+      org: "CERIST, Algiers",
       tech: ["Django", "HTML/CSS", "Express", "JavaScript"],
     },
     {
@@ -132,7 +145,7 @@ export default function App() {
       description:
         "A newsletter mailing app that sends cybersecurity relevant mails to subscribers 3 times a week.",
       status: "IN DEV",
-      url: "#",
+      url: "https://wikayanet.dz/",
       tech: ["Go", "Fiber", "Docker", "Mailgun", "n8n"],
     },
   ];
@@ -252,6 +265,11 @@ export default function App() {
     Fiber: "#00ADD8",
     Mailgun: "#F06B66",
     n8n: "#EA4B71",
+    Grafana: "#F46800",
+    Prometheus: "#E6522C",
+    Loki: "#F2CC0C",
+    Syslog: "#4EAA25",
+    Alertmanager: "#E6522C",
   };
 
   const languages = [
@@ -395,6 +413,20 @@ export default function App() {
                 {section}
               </button>
             ))}
+            <Link
+              to="/freelance"
+              className="flex items-center gap-1.5 text-xs sm:text-sm tracking-wider whitespace-nowrap flex-shrink-0 border border-[#2563eb] text-[#2563eb] bg-[#2563eb]/10 px-2.5 sm:px-3 py-1 rounded-full transition-all duration-150 hover:bg-[#2563eb]/20"
+              style={{ boxShadow: "0 0 0px rgba(37, 99, 235, 0)" }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = "0 0 8px rgba(37, 99, 235, 0.5)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = "0 0 0px rgba(37, 99, 235, 0)";
+              }}
+            >
+              <Briefcase className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              Check Freelance
+            </Link>
           </div>
           <button
             onClick={() => setIsDark(!isDark)}
@@ -743,89 +775,136 @@ export default function App() {
               PROJECTS
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              {projects.map((project, index) => (
-                <motion.a
-                  key={index}
-                  href={project.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{
-                    opacity: 1,
-                    y: 0,
-                    transition: { delay: index * 0.1, duration: 0.4 },
-                  }}
-                  viewport={{ once: false, amount: 0.3 }}
-                  whileHover={{
-                    boxShadow: isDark
-                      ? "0 0 12px rgba(255, 255, 255, 0.4)"
-                      : "0 0 12px rgba(37, 99, 235, 0.35)",
-                    transition: { duration: 0.12, ease: "easeOut" },
-                  }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                  className={`flex flex-col border ${borderClass} p-5 sm:p-6 rounded-lg group cursor-pointer no-underline ${textClass}`}
-                >
-                  <div className="flex justify-between items-start mb-3">
-                    <h3
-                      className="text-lg sm:text-xl font-bold"
-                      style={{
-                        fontFamily: "system-ui, -apple-system, sans-serif",
-                      }}
+            <div className={`border ${borderClass} rounded-lg overflow-hidden`}>
+              {projects.map((project, index) => {
+                const isOpen = expandedProject === index;
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{
+                      opacity: 1,
+                      y: 0,
+                      transition: { delay: index * 0.05, duration: 0.4 },
+                    }}
+                    viewport={{ once: false, amount: 0.3 }}
+                    className={`border-b ${borderClass}`}
+                  >
+                    <button
+                      onClick={() =>
+                        setExpandedProject(isOpen ? null : index)
+                      }
+                      className="w-full flex items-center justify-between gap-3 px-5 sm:px-6 py-4 text-left hover:opacity-80 transition-opacity duration-150"
                     >
-                      {project.title}
-                    </h3>
-                    <span
-                      className={`text-xs border px-2 py-1 rounded ${getStatusColor(project.status)}`}
-                    >
-                      {project.status}
-                    </span>
-                  </div>
-                  <p className="text-sm font-light mb-4 flex-grow">
-                    {project.description}
-                  </p>
-                  {/* Tech tags — pinned to bottom */}
-                  <div className="flex flex-wrap gap-1.5 mb-3 mt-auto">
-                    {project.tech.map((t) => (
-                      <span
-                        key={t}
-                        className={`text-xs border ${borderClass} px-2 py-0.5 rounded transition-all duration-150 ${
-                          isDark ? "opacity-90" : "opacity-80"
-                        }`}
-                        style={getSkillTagStyle(t)}
-                        {...skillTagHoverHandlers(t)}
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex justify-end opacity-50 group-hover:opacity-100 transition-opacity duration-150">
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 20 20"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    >
-                      <path d="M5 15L15 5M15 5H5M15 5V15" />
-                    </svg>
-                  </div>
-                </motion.a>
-              ))}
+                      <div className="flex items-center gap-3 min-w-0">
+                        <h3
+                          className="text-base sm:text-lg font-bold truncate"
+                          style={{
+                            fontFamily: "system-ui, -apple-system, sans-serif",
+                          }}
+                        >
+                          {project.title}
+                        </h3>
+                        <span
+                          className={`text-xs border px-2 py-1 rounded flex-shrink-0 ${getStatusColor(project.status)}`}
+                        >
+                          {project.status}
+                        </span>
+                      </div>
+                      {project.org && (
+                        <span
+                          className={`hidden sm:flex items-center gap-1 ml-auto text-xs tracking-wide whitespace-nowrap ${mutedClass}`}
+                        >
+                          <MapPin className="w-3 h-3" />
+                          {project.org}
+                        </span>
+                      )}
+                      <ChevronDown
+                        className="w-4 h-4 flex-shrink-0 transition-transform duration-200"
+                        style={{
+                          transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                        }}
+                      />
+                    </button>
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.25, ease: "easeOut" }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-5 sm:px-6 pb-5">
+                            {project.org && (
+                              <p
+                                className={`sm:hidden flex items-center gap-1 text-xs tracking-wide mb-2 ${mutedClass}`}
+                              >
+                                <MapPin className="w-3 h-3" />
+                                {project.org}
+                              </p>
+                            )}
+                            <p className="text-sm font-light mb-3">
+                              {project.description}
+                            </p>
+                            <div className="flex flex-wrap gap-1.5 mb-3">
+                              {project.tech.map((t) => (
+                                <span
+                                  key={t}
+                                  className={`text-xs border ${borderClass} px-2 py-0.5 rounded transition-all duration-150 ${
+                                    isDark ? "opacity-90" : "opacity-80"
+                                  }`}
+                                  style={getSkillTagStyle(t)}
+                                  {...skillTagHoverHandlers(t)}
+                                >
+                                  {t}
+                                </span>
+                              ))}
+                            </div>
+                            {project.url && (
+                            <a
+                              href={project.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-xs tracking-wide opacity-60 hover:opacity-100 transition-opacity duration-150"
+                            >
+                              View Project
+                              <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                              >
+                                <path d="M5 15L15 5M15 5H5M15 5V15" />
+                              </svg>
+                            </a>
+                            )}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                );
+              })}
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.4 }}
-                viewport={{ once: false, amount: 0.3 }}
-                className={`border border-dashed ${borderClass} p-5 sm:p-6 rounded-lg flex items-center justify-center col-span-1 md:col-span-2`}
+              <Link
+                to="/freelance"
+                className="flex items-center justify-between gap-3 px-5 sm:px-6 py-4 text-[#2563eb] bg-[#2563eb]/10 hover:bg-[#2563eb]/20 transition-colors duration-150"
               >
-                <p className="text-sm font-light tracking-wide">
-                  2 OTHER PROJECTS ARE UNDER CONSTRUCTION
-                </p>
-              </motion.div>
+                <span className="text-sm font-bold tracking-wide">
+                  More freelance projects
+                </span>
+                <Briefcase className="w-4 h-4 flex-shrink-0" />
+              </Link>
             </div>
+
+            <p
+              className={`text-xs sm:text-sm font-light tracking-wide mt-4 ${mutedClass}`}
+            >
+              2 other projects are under construction
+            </p>
           </div>
         </section>
 
