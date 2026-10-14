@@ -36,6 +36,7 @@ const categories: Category[] = [
         role: "Backend & Infrastructure Developer",
         badge: "REMOTE",
         current: true,
+        period: "FEB 2026 - PRESENT",
         context:
           "Building backend solutions for various apps while managing Digital Plum's infrastructure and deployments.",
       },
@@ -44,6 +45,7 @@ const categories: Category[] = [
         role: "IT & Network Administrator",
         badge: "HYBRID",
         current: true,
+        period: "AUG 2026 - PRESENT",
         context:
           "Maintaining and improving the network topology, configuring workstations, managing AD DS across 3 sites and ensuring the safe deployment of the school's apps.",
       },
@@ -51,6 +53,7 @@ const categories: Category[] = [
         title: "AUTO-ENTREPRENEUR",
         role: "Architecte Réseau et Sécurité",
         badge: "FREELANCE",
+        period: "FEB 2026 - PRESENT",
         current: true,
         context:
           "Designing and securing network infrastructures for clients as a self-employed network & security architect.",
