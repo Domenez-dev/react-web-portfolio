@@ -102,3 +102,14 @@
     }
   }
 }
+
+/* ========== Experience Cards ========== */
+.experience-card {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.experience-card:hover {
+  border-color: var(--card-color);
+  box-shadow: 0 0 22px -8px var(--card-color);
+  transform: translateX(2px);
+}

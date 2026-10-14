@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router";
 import { AnimatePresence, motion } from "motion/react";
-import { Moon, Sun, Github, Linkedin, FileText, ChevronLeft, ChevronRight, Briefcase, ChevronDown, MapPin } from "lucide-react";
+import { Moon, Sun, Github, Linkedin, FileText, ChevronLeft, ChevronRight, Briefcase, ChevronDown, MapPin, Menu, X } from "lucide-react";
 import DotGrid from "./components/DotGrid";
 import CustomCursor from "./components/CustomCursor";
+import ExperienceSection from "./components/ExperienceSection";
 import { useTheme } from "./hooks/useTheme";
 
 export default function App() {
@@ -11,6 +12,7 @@ export default function App() {
   const [isDark, setIsDark] = useTheme(true);
   const [activeSection, setActiveSection] = useState(0);
   const [expandedProject, setExpandedProject] = useState<number | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Mirror activeSection in a ref so the scroll/keydown listeners can read the
@@ -147,53 +149,6 @@ export default function App() {
       status: "IN DEV",
       url: "https://wikayanet.dz/",
       tech: ["Go", "Fiber", "Docker", "Mailgun", "n8n"],
-    },
-  ];
-
-  const internships = [
-    {
-      company: "SONATRACH",
-      role: "Infrastructure and Networks Engineer",
-      period: "JAN 2026 - PRESENT",
-      context: "and deployment of an HCI based on open source technologies.",
-      status: "ONGOING",
-    },
-    {
-      company: "AMANA",
-      role: "Microservices Monitoring Intern",
-      period: "JUN 2025 - AUG 2025",
-      context:
-        "Implemented a Monitoring solution for microservices, and databases",
-      status: "COMPLETED",
-    },
-    {
-      company: "CERIST",
-      role: "Intern Web Developer & Web Security Engineer",
-      period: "JAN 2024 - MAY 2024",
-      context:
-        "Developed a Web app while Implementing web security best practices",
-      status: "COMPLETED",
-    },
-  ];
-
-  const clubs = [
-    {
-      name: "GDG ESI ALGER",
-      role: "Core Team Member",
-      period: "OCT 2024 - PRESENT",
-      context: "Developper at Google Developer Group community activities",
-    },
-    {
-      name: "CELEC USTHB",
-      role: "Communication Team Member",
-      period: "OCT 2022 - OCT 2024",
-      context: "Electronics and embedded systems club",
-    },
-    {
-      name: "SHELLMATES CLUB ESI ALGER",
-      role: "External Relations Member",
-      period: "NOV 2024 - PRESENT",
-      context: "Cybersecurity and CTF competitions",
     },
   ];
 
@@ -398,13 +353,14 @@ export default function App() {
       <nav
         className={`fixed top-0 left-0 right-0 z-40 ${isDark ? "bg-black/70" : "bg-white/70"} backdrop-blur-md border-b ${borderClass}`}
       >
-        <div className="flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4">
-          <div className="flex gap-3 sm:gap-8 portfolio-nav-links overflow-x-auto">
+        <div className="flex items-center justify-between gap-3 px-4 sm:px-8 h-14 sm:h-16">
+          {/* Desktop links */}
+          <div className="hidden md:flex items-center gap-5 lg:gap-8">
             {sections.map((section, index) => (
               <button
                 key={section}
                 onClick={() => scrollToSection(index)}
-                className={`text-xs sm:text-sm tracking-wider transition-all duration-150 whitespace-nowrap ${
+                className={`text-sm tracking-wider transition-all duration-150 whitespace-nowrap ${
                   activeSection === index
                     ? `opacity-100 ${!isDark ? "text-[#2563eb]" : ""}`
                     : "opacity-40"
@@ -415,7 +371,7 @@ export default function App() {
             ))}
             <Link
               to="/freelance"
-              className="flex items-center gap-1.5 text-xs sm:text-sm tracking-wider whitespace-nowrap flex-shrink-0 border border-[#2563eb] text-[#2563eb] bg-[#2563eb]/10 px-2.5 sm:px-3 py-1 rounded-full transition-all duration-150 hover:bg-[#2563eb]/20"
+              className="flex items-center gap-1.5 text-sm tracking-wider whitespace-nowrap flex-shrink-0 border border-[#2563eb] text-[#2563eb] bg-[#2563eb]/10 px-3 py-1 rounded-full transition-all duration-150 hover:bg-[#2563eb]/20"
               style={{ boxShadow: "0 0 0px rgba(37, 99, 235, 0)" }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.boxShadow = "0 0 8px rgba(37, 99, 235, 0.5)";
@@ -424,38 +380,119 @@ export default function App() {
                 e.currentTarget.style.boxShadow = "0 0 0px rgba(37, 99, 235, 0)";
               }}
             >
-              <Briefcase className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              <Briefcase className="w-3.5 h-3.5" />
               Check Freelance
             </Link>
           </div>
-          <button
-            onClick={() => setIsDark(!isDark)}
-            className="relative p-2 rounded-lg hover:opacity-80 transition-opacity duration-150 flex-shrink-0 overflow-hidden group w-[34px] h-[34px]"
-          >
-            {/* Spinning gradient border */}
-            <div className="absolute inset-[-200%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_70%,#2563eb_100%)] opacity-80" />
 
-            {/* Inner button background */}
-            <div
-              className={`absolute inset-[1px] rounded-[7px] ${bgClass} z-0 flex items-center justify-center`}
-            >
-              <div className="relative z-10">
-                {isDark ? (
-                  <Sun className="w-4 h-4" />
-                ) : (
-                  <Moon className="w-4 h-4" />
-                )}
-              </div>
-            </div>
+          {/* Mobile: menu toggle + current section */}
+          <button
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-expanded={menuOpen}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            className="md:hidden flex items-center gap-3 min-w-0 py-2"
+          >
+            {menuOpen ? (
+              <X className="w-5 h-5 flex-shrink-0" />
+            ) : (
+              <Menu className="w-5 h-5 flex-shrink-0" />
+            )}
+            <span className="text-xs tracking-wider truncate">
+              <span className="opacity-40">
+                {String(activeSection + 1).padStart(2, "0")} /
+              </span>{" "}
+              <span className={!isDark ? "text-[#2563eb]" : ""}>
+                {sections[activeSection]}
+              </span>
+            </span>
           </button>
+
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <Link
+              to="/freelance"
+              className="md:hidden flex items-center gap-1.5 text-xs tracking-wider whitespace-nowrap border border-[#2563eb] text-[#2563eb] bg-[#2563eb]/10 px-2.5 py-1 rounded-full"
+            >
+              <Briefcase className="w-3 h-3" />
+              Freelance
+            </Link>
+            <button
+              onClick={() => setIsDark(!isDark)}
+              aria-label="Toggle theme"
+              className="relative p-2 rounded-lg hover:opacity-80 transition-opacity duration-150 flex-shrink-0 overflow-hidden group w-[34px] h-[34px]"
+            >
+              {/* Spinning gradient border */}
+              <div className="absolute inset-[-200%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_70%,#2563eb_100%)] opacity-80" />
+
+              {/* Inner button background */}
+              <div
+                className={`absolute inset-[1px] rounded-[7px] ${bgClass} z-0 flex items-center justify-center`}
+              >
+                <div className="relative z-10">
+                  {isDark ? (
+                    <Sun className="w-4 h-4" />
+                  ) : (
+                    <Moon className="w-4 h-4" />
+                  )}
+                </div>
+              </div>
+            </button>
+          </div>
         </div>
+
+        {/* Mobile menu */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className={`md:hidden overflow-hidden border-t ${isDark ? "border-white/15" : "border-black/15"}`}
+            >
+              <div className="px-4 py-2">
+                {sections.map((section, index) => (
+                  <button
+                    key={section}
+                    onClick={() => {
+                      setMenuOpen(false);
+                      scrollToSection(index);
+                    }}
+                    className={`w-full flex items-center gap-4 py-3 text-sm tracking-wider text-left transition-opacity duration-150 ${
+                      activeSection === index
+                        ? `opacity-100 ${!isDark ? "text-[#2563eb]" : ""}`
+                        : "opacity-50"
+                    }`}
+                  >
+                    <span className="text-xs opacity-60">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    {section}
+                    {activeSection === index && (
+                      <span
+                        className={`ml-auto w-1.5 h-1.5 rounded-full ${isDark ? "bg-white" : "bg-[#2563eb]"}`}
+                      />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
+
+      {/* Tap outside to close the mobile menu */}
+      {menuOpen && (
+        <div
+          className="fixed inset-0 z-30 md:hidden"
+          onClick={() => setMenuOpen(false)}
+        />
+      )}
 
       {/* Side Navigation Arrows */}
       {activeSection > 0 && (
         <button
           onClick={() => scrollToSection(activeSection - 1)}
-          className={`fixed left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full border ${borderClass} ${isDark ? "bg-black/40" : "bg-white/40"} opacity-40 hover:opacity-100 transition-opacity duration-150`}
+          className={`fixed left-3 sm:left-5 bottom-5 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 z-30 p-2 rounded-full border ${borderClass} ${isDark ? "bg-black/40" : "bg-white/40"} opacity-40 hover:opacity-100 transition-opacity duration-150`}
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
@@ -463,7 +500,7 @@ export default function App() {
       {activeSection < 5 && (
         <button
           onClick={() => scrollToSection(activeSection + 1)}
-          className={`fixed right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full border ${borderClass} ${isDark ? "bg-black/40" : "bg-white/40"} opacity-40 hover:opacity-100 transition-opacity duration-150`}
+          className={`fixed right-3 sm:right-5 bottom-5 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 z-30 p-2 rounded-full border ${borderClass} ${isDark ? "bg-black/40" : "bg-white/40"} opacity-40 hover:opacity-100 transition-opacity duration-150`}
         >
           <ChevronRight className="w-5 h-5" />
         </button>
@@ -909,111 +946,8 @@ export default function App() {
         </section>
 
         {/* Slide 5 - Experience */}
-        <section className="min-w-full w-screen h-full snap-start flex items-center justify-center px-6 sm:px-8 md:px-16 lg:px-24">
-          <div className="w-full max-w-6xl">
-            <h2
-              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-10 sm:mb-16"
-              style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
-            >
-              EXPERIENCE
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
-              {/* Internships */}
-              <div>
-                <h3
-                  className={`text-sm tracking-widest mb-6 sm:mb-8 ${mutedClass}`}
-                >
-                  INTERNSHIPS
-                </h3>
-                <div
-                  className={`relative pl-6 sm:pl-8 border-l ${borderClass} space-y-10 sm:space-y-12`}
-                >
-                  {internships.map((exp, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.2, duration: 0.5 }}
-                      viewport={{ once: false, amount: 0.3 }}
-                      className="relative"
-                    >
-                      <div
-                        className={`absolute -left-7 sm:-left-9 top-0 w-3 h-3 ${bgSecondaryClass} rounded-full`}
-                      />
-                      <div className="space-y-2">
-                        <div className="flex items-start justify-between gap-2">
-                          <h4
-                            className="text-lg sm:text-xl font-bold"
-                            style={{
-                              fontFamily:
-                                "system-ui, -apple-system, sans-serif",
-                            }}
-                          >
-                            {exp.company}
-                          </h4>
-                          <span
-                            className={`text-xs border px-2 py-1 rounded flex-shrink-0 ${getStatusColor(exp.status)}`}
-                          >
-                            {exp.status}
-                          </span>
-                        </div>
-                        <p className="text-sm font-light">{exp.role}</p>
-                        <p className={`text-xs ${mutedClass}`}>{exp.context}</p>
-                        <p className="text-xs tracking-widest pt-2">
-                          {exp.period}
-                        </p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Scientific Clubs — no ONGOING status badge */}
-              <div>
-                <h3
-                  className={`text-sm tracking-widest mb-6 sm:mb-8 ${mutedClass}`}
-                >
-                  SCIENTIFIC CLUBS
-                </h3>
-                <div
-                  className={`relative pl-6 sm:pl-8 border-l ${borderClass} space-y-10 sm:space-y-12`}
-                >
-                  {clubs.map((club, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.2, duration: 0.5 }}
-                      viewport={{ once: false, amount: 0.3 }}
-                      className="relative"
-                    >
-                      <div
-                        className={`absolute -left-7 sm:-left-9 top-0 w-3 h-3 ${bgSecondaryClass} rounded-full`}
-                      />
-                      <div className="space-y-2">
-                        <h4
-                          className="text-lg sm:text-xl font-bold"
-                          style={{
-                            fontFamily: "system-ui, -apple-system, sans-serif",
-                          }}
-                        >
-                          {club.name}
-                        </h4>
-                        <p className="text-sm font-light">{club.role}</p>
-                        <p className={`text-xs ${mutedClass}`}>
-                          {club.context}
-                        </p>
-                        <p className="text-xs tracking-widest pt-2">
-                          {club.period}
-                        </p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+        <section className="min-w-full w-screen h-full snap-start flex overflow-y-auto px-6 sm:px-8 md:px-16 lg:px-24">
+          <ExperienceSection isDark={isDark} />
         </section>
 
         {/* Slide 6 - Contact */}
